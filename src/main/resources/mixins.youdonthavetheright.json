@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.neire.mc.youdonthavetheright.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "mixins.youdonthavetheright.refmap.json",
+  "mixins": [
+    "AbstractFurnaceBlockEntityMixin",
+    "ServerGamePacketListenerImplMixin"
+  ],
+  "server": [
+  ],
+  "client": [
+  ]
+}

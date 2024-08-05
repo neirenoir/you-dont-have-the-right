@@ -1,6 +1,6 @@
-package example.examplemod
+package dev.neire.mc.youdonthavetheright
 
-import example.examplemod.block.ModBlocks
+import dev.neire.mc.youdonthavetheright.block.ModBlocks
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
@@ -18,26 +18,26 @@ import thedarkcolour.kotlinforforge.forge.runForDist
  *
  * An example for blocks is in the `blocks` package of this mod.
  */
-@Mod(ExampleMod.ID)
-object ExampleMod {
-    const val ID = "examplemod"
+@Mod(YouDontHaveTheRight.ID)
+object YouDontHaveTheRight {
+    const val ID = "youdonthavetheright"
 
     // the logger for our mod
     val LOGGER: Logger = LogManager.getLogger(ID)
 
     init {
-        LOGGER.log(Level.INFO, "Hello world!")
+        LOGGER.log(Level.INFO, "Initializing You Don't Have The Right")
 
         // Register the KDeferredRegister to the mod-specific event bus
         ModBlocks.REGISTRY.register(MOD_BUS)
 
         val obj = runForDist(
             clientTarget = {
-                MOD_BUS.addListener(::onClientSetup)
+                MOD_BUS.addListener(YouDontHaveTheRight::onClientSetup)
                 Minecraft.getInstance()
             },
             serverTarget = {
-                MOD_BUS.addListener(::onServerSetup)
+                MOD_BUS.addListener(YouDontHaveTheRight::onServerSetup)
                 "test"
             })
 

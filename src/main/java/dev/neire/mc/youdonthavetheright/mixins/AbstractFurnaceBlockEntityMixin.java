@@ -1,15 +1,11 @@
 package dev.neire.mc.youdonthavetheright.mixins;
 
-import com.mojang.datafixers.util.Pair;
 import dev.neire.mc.youdonthavetheright.api.TimedCrafter;
 import dev.neire.mc.youdonthavetheright.logic.FurnaceLogicKt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -22,7 +18,6 @@ import org.apache.commons.lang3.tuple.MutablePair;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -73,7 +68,6 @@ public abstract class
             getCurrentRecipe() != null
              && !getCurrentRecipe().matches((AbstractFurnaceBlockEntity) (Object) this, level)
         );
-
 
         if (!setByPlayer && !sameRecipe) {
             // Current recipe (if any) was not set by a player; likely inserted by hopper

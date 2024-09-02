@@ -28,11 +28,11 @@ public abstract class ServerGamePacketListenerImplMixin {
                 value = "INVOKE",
                 target =
                     "Lnet/minecraft/world/inventory/AbstractContainerMenu;" +
-                        "clicked(" +
-                            "II" +
-                            "Lnet/minecraft/world/inventory/ClickType;" +
-                            "Lnet/minecraft/world/entity/player/Player;" +
-                        ")V"
+                    "clicked(" +
+                        "II" +
+                        "Lnet/minecraft/world/inventory/ClickType;" +
+                        "Lnet/minecraft/world/entity/player/Player;" +
+                    ")V"
             ),
         cancellable = true
     )
@@ -84,9 +84,9 @@ public abstract class ServerGamePacketListenerImplMixin {
             target =
                 "Lnet/minecraft/world/inventory/AbstractContainerMenu;" +
                     "clicked(" +
-                    "II" +
-                    "Lnet/minecraft/world/inventory/ClickType;" +
-                    "Lnet/minecraft/world/entity/player/Player;" +
+                        "II" +
+                        "Lnet/minecraft/world/inventory/ClickType;" +
+                        "Lnet/minecraft/world/entity/player/Player;" +
                     ")V",
             shift = At.Shift.AFTER
         )
@@ -114,7 +114,6 @@ public abstract class ServerGamePacketListenerImplMixin {
         var e = new ContainerEvent.SlotChange.Moved.After(source, target, slot);
         MinecraftForge.EVENT_BUS.post(e);
     }
-
 
 }
 

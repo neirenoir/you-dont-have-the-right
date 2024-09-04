@@ -18,8 +18,6 @@ public class YdhtrConfig {
             BUILDER
                 .comment("Prevents the learning of recipes through non-explicit means")
                 .define("forcePreventDivineInspiration", true);
-
-        // FIXME: maybe server only?
         FORCE_LIMITED_CRAFTING =
             BUILDER
                 .comment("Force the \"doLimitedCrafting\" game rule to always be true")

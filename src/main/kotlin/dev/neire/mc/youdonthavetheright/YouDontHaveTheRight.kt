@@ -43,8 +43,8 @@ object YouDontHaveTheRight {
                 MOD_BUS.addListener(YouDontHaveTheRight::onServerSetup)
                 "test"
             })
-        ModLoadingContext.get().registerConfig(Type.COMMON, YdhtrConfig.SPEC)
-        println(obj)
+
+        ModLoadingContext.get().registerConfig(Type.SERVER, YdhtrConfig.SPEC)
     }
 
     /**

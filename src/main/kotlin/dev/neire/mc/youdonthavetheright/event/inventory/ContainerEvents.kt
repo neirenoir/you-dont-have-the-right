@@ -1,10 +1,9 @@
-package dev.neire.mc.youdonthavetheright.event
+package dev.neire.mc.youdonthavetheright.event.inventory
 
 import net.minecraft.world.Container
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.Slot
-import net.minecraft.world.item.ItemStack
 import net.minecraftforge.eventbus.api.Cancelable
 import net.minecraftforge.eventbus.api.Event
 

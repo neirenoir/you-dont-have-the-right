@@ -1,7 +1,7 @@
-package dev.neire.mc.youdonthavetheright.mixins;
+package dev.neire.mc.youdonthavetheright.mixins.crafter;
 
 import dev.neire.mc.youdonthavetheright.api.TimedCrafter;
-import dev.neire.mc.youdonthavetheright.logic.FurnaceLogicKt;
+import dev.neire.mc.youdonthavetheright.logic.crafter.FurnaceLogicKt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;

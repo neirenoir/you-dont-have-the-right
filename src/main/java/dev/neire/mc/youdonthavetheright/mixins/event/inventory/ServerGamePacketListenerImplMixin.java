@@ -1,14 +1,12 @@
-package dev.neire.mc.youdonthavetheright.mixins;
+package dev.neire.mc.youdonthavetheright.mixins.event.inventory;
 
-import dev.neire.mc.youdonthavetheright.event.ContainerEvent;
-import net.minecraft.network.protocol.game.ServerGamePacketListener;
+import dev.neire.mc.youdonthavetheright.event.inventory.ContainerEvent;
 import net.minecraft.network.protocol.game.ServerboundContainerClickPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.Container;
 import net.minecraftforge.common.MinecraftForge;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

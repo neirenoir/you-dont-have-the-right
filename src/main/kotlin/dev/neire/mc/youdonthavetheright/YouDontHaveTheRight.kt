@@ -1,8 +1,11 @@
 package dev.neire.mc.youdonthavetheright
 
 import dev.neire.mc.youdonthavetheright.block.ModBlocks
+import dev.neire.mc.youdonthavetheright.config.YdhtrConfig
 import net.minecraft.client.Minecraft
+import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.config.ModConfig.Type
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
 import org.apache.logging.log4j.Level
@@ -40,7 +43,7 @@ object YouDontHaveTheRight {
                 MOD_BUS.addListener(YouDontHaveTheRight::onServerSetup)
                 "test"
             })
-
+        ModLoadingContext.get().registerConfig(Type.COMMON, YdhtrConfig.SPEC)
         println(obj)
     }
 

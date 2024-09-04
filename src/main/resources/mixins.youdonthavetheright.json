@@ -5,8 +5,12 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "mixins.youdonthavetheright.refmap.json",
   "mixins": [
-    "AbstractFurnaceBlockEntityMixin",
-    "ServerGamePacketListenerImplMixin"
+    "crafter.AbstractFurnaceBlockEntityMixin",
+    "divineinspiration.AbstractFurnaceBlockEntityRecipeHolderMixin",
+    "divineinspiration.AdvancementRewardsMixin",
+    "divineinspiration.GameRulesMixin",
+    "divineinspiration.ResultContainerRecipeHolderMixin",
+    "event.inventory.ServerGamePacketListenerImplMixin"
   ],
   "server": [
   ],

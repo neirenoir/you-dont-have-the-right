@@ -14,14 +14,18 @@ public class YdhtrConfig {
 
     static {
         var BUILDER = new ForgeConfigSpec.Builder();
-        FORCE_PREVENT_DIVINE_INSPIRATION =
-            BUILDER
-                .comment("Prevents the learning of recipes through non-explicit means")
-                .define("forcePreventDivineInspiration", true);
-        FORCE_LIMITED_CRAFTING =
-            BUILDER
-                .comment("Force the \"doLimitedCrafting\" game rule to always be true")
-                .define("forceLimitedCrafting", true);
+
+        BUILDER.push("Crafting and recipes");
+            FORCE_LIMITED_CRAFTING =
+                BUILDER
+                    .comment("Force the \"doLimitedCrafting\" game rule to always be true")
+                    .define("forceLimitedCrafting", true);
+
+            FORCE_PREVENT_DIVINE_INSPIRATION =
+                BUILDER
+                    .comment("Prevents the learning of recipes through non-explicit means")
+                    .define("forcePreventDivineInspiration", true);
+        BUILDER.pop();
 
         SPEC = BUILDER.build();
     }

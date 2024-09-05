@@ -19,11 +19,11 @@ open class ContainerEvent(open val source: Container): Event() {
         ): SlotChange(source, slot) {
 
             fun toPlayer(): Boolean {
-                return target is Inventory;
+                return target is Inventory
             }
 
             fun fromPlayer(): Boolean {
-                return source is Inventory;
+                return source is Inventory
             }
 
             fun getInvolvedPlayer(): Player? {

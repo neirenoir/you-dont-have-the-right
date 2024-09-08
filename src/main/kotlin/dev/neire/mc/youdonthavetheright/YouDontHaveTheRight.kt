@@ -2,7 +2,9 @@ package dev.neire.mc.youdonthavetheright
 
 import dev.neire.mc.youdonthavetheright.block.ModBlocks
 import dev.neire.mc.youdonthavetheright.config.YdhtrConfig
+import dev.neire.mc.youdonthavetheright.logic.crafter.FurnaceLogic
 import net.minecraft.client.Minecraft
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig.Type
@@ -43,7 +45,7 @@ object YouDontHaveTheRight {
                 MOD_BUS.addListener(YouDontHaveTheRight::onServerSetup)
                 "test"
             })
-
+        MinecraftForge.EVENT_BUS.register(FurnaceLogic)
         ModLoadingContext.get().registerConfig(Type.SERVER, YdhtrConfig.SPEC)
     }
 

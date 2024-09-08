@@ -1,25 +1,25 @@
 package dev.neire.mc.youdonthavetheright.mixins.crafter;
 
 import dev.neire.mc.youdonthavetheright.api.TimedCrafter;
-import dev.neire.mc.youdonthavetheright.logic.crafter.FurnaceLogicKt;
+import dev.neire.mc.youdonthavetheright.logic.crafter.FurnaceLogic;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import org.apache.commons.lang3.tuple.MutablePair;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Optional;
 
 @SuppressWarnings("unused")
 @Mixin(AbstractFurnaceBlockEntity.class)
@@ -44,8 +44,7 @@ public abstract class
     @Shadow public abstract ItemStack getItem(int p_58328_);
 
     @Unique
-    protected final MutablePair<Recipe<AbstractFurnaceBlockEntity>, ICapabilityProvider>
-        you_dont_have_the_right$selectedRecipe = new MutablePair<>(null, this);
+    protected Recipe<AbstractFurnaceBlockEntity> you_dont_have_the_right$selectedRecipe = null;
 
     /**
      * @author Neirenoir
@@ -56,39 +55,78 @@ public abstract class
     public static void serverTick(
         Level level, BlockPos p, BlockState s, AbstractFurnaceBlockEntity furnace
     ) {
-        FurnaceLogicKt.tickLogic(level, p, s,
-            (TimedCrafter<AbstractFurnaceBlockEntity>) furnace);
+        FurnaceLogic.INSTANCE.tickLogic(
+            p, s, (TimedCrafter<AbstractFurnaceBlockEntity>) furnace
+        );
     }
 
     @Inject(at = @At("TAIL"), method = "setItem")
     private void itemInserted(int slot, ItemStack stack, CallbackInfo ci) {
-        boolean setByPlayer = (you_dont_have_the_right$selectedRecipe.getLeft() instanceof Player);
-
-        boolean sameRecipe = (
-            getCurrentRecipe() != null
-             && !getCurrentRecipe().matches((AbstractFurnaceBlockEntity) (Object) this, level)
-        );
-
-        if (!setByPlayer && !sameRecipe) {
-            // Current recipe (if any) was not set by a player; likely inserted by hopper
-            setCurrentRecipe(
-                FurnaceLogicKt.recalculateRecipe(level, this, null), this
-            );
+        if (level == null) {
+            // I am not sure this could even happen
+            return;
         }
+
+        RecipeManager recipeManager = level.getRecipeManager();
+        RegistryAccess registryAccess = level.registryAccess();
+
+        Optional<Recipe<AbstractFurnaceBlockEntity>> newRecipe =
+            recipeManager.getRecipeFor(
+                recipeType,
+                (AbstractFurnaceBlockEntity) (Object) this,
+                level
+            );
+
+        if (newRecipe.isEmpty()) {
+            setCurrentRecipe(null);
+            return;
+        }
+
+        // This will get overrode by the After part of the SlotChange event
+        // if it was initiated by a player
+        setCurrentRecipe(newRecipe.get());
+
+        jumpstart();
     }
 
     @Inject(at = @At("TAIL"), method = "clearContent")
     private void contentCleared(CallbackInfo ci) {
-        setCurrentRecipe(null, this);
+        setCurrentRecipe(null);
     }
 
+    /*
     @Inject(at = @At("TAIL"), method = "removeItem")
     private void removedItem(int i, int j, CallbackInfoReturnable<ItemStack> ci) {
         // FIXME: if, for some unholy reason, the selected recipe consumes more than one
         //        ingredient, this may not invalidate the recipe correctly
         if (getItem(0).isEmpty()) {
-            setCurrentRecipe(null, this);
+            setCurrentRecipe(null, null);
         }
+    }
+*/
+    @Unique @Override
+    public boolean jumpstart() {
+        if (level == null) {
+            return false;
+        }
+
+        RegistryAccess registryAccess = level.registryAccess();
+        var recipe = getCurrentRecipe();
+        if (
+            FurnaceLogic.INSTANCE.shouldStep(
+            this, recipe != null ? recipe.getResultItem(registryAccess) : ItemStack.EMPTY
+            ) && !isRunning() && recipe != null
+        ) {
+            // FIXME: this will consume fuel even if the recipe is later
+            //        overrode by the player's recipes later
+            FurnaceLogic.INSTANCE.refuel(this);
+            FurnaceLogic.INSTANCE.setLitBlockState(
+                this, getBlockState(), getBlockPos(), true
+            );
+            return true;
+        }
+
+        return false;
     }
 
     @Unique
@@ -96,53 +134,57 @@ public abstract class
         return isLit();
     }
 
-    @Unique
+    @Unique @Override
+    public Level getLevel() {
+        return level;
+    }
+
+    @Unique @Override
     public int getRunway() {
         return litTime;
     }
 
-    @Unique
+    @Unique @Override
     public void setRunway(int runway) {
         litTime = runway;
     }
 
-    @Unique
+    @Unique @Override
     public int getProgress() {
         return cookingProgress;
     }
 
-    @Unique
+    @Unique @Override
     public void setProgress(int progress) {
         cookingProgress = progress;
     }
 
-    @Unique
+    @Unique @Override
     public Recipe<AbstractFurnaceBlockEntity> getCurrentRecipe() {
-        return you_dont_have_the_right$selectedRecipe.getLeft();
+        return you_dont_have_the_right$selectedRecipe;
     }
 
-    @Unique
-    public void setCurrentRecipe(Recipe<AbstractFurnaceBlockEntity> recipe, ICapabilityProvider owner) {
-        you_dont_have_the_right$selectedRecipe.setLeft(recipe);
-        you_dont_have_the_right$selectedRecipe.setRight(owner);
+    @Unique @Override
+    public void setCurrentRecipe(Recipe<AbstractFurnaceBlockEntity> recipe) {
+        you_dont_have_the_right$selectedRecipe = recipe;
     }
 
-    @Unique
+    @Unique @Override
     public Recipe<AbstractFurnaceBlockEntity> calculateRecipe() {
         return null;
     }
 
-    @Unique
+    @Unique @Override
     public NonNullList<ItemStack> getItems() {
         return items;
     }
 
-    @Unique
-    public void updateState(Level level, BlockPos pos, BlockState s) {
-        setChanged(level, pos, s);
+    @Unique @Override
+    public void updateState(Level level, BlockState s) {
+        setChanged(level, getBlockPos(), s);
     }
 
-    @Unique
+    @Unique @Override
     public RecipeType<Recipe<AbstractFurnaceBlockEntity>> getRecipeType() {
         return recipeType;
     }

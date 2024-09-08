@@ -6,6 +6,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,6 +43,8 @@ public abstract class ServerGamePacketListenerImplMixin {
             return;
         }
 
+
+
         var slot = player.containerMenu.getSlot(p.getSlotNum());
         Container source;
         Container target;
@@ -49,14 +54,19 @@ public abstract class ServerGamePacketListenerImplMixin {
         // container", which can be the player's inventory itself if the event has been
         // triggered by a player shuffling around items inside their own inventory screen.
         // In that case: source == target
-        if (slot.container == player.getInventory()) {
-            // From container to player
-            source = player.containerMenu.getSlot(0).container;
-            target = slot.container;
+        Container playerContainer = player.getInventory();
+        Container slotContainer = player.containerMenu.getSlot(0).container;
+
+        boolean isPlayerSlot = p.getSlotNum() > slotContainer.getContainerSize() - 1;
+        // Pickup`fires AFTER picking or dropping
+        if (p.getChangedSlots().size() ==  1) {
+            // Player just picked/dropped the carried item
+            boolean dropped = p.getCarriedItem() == ItemStack.EMPTY;
+            source = dropped || isPlayerSlot ? playerContainer : slotContainer;
+            target = !dropped || isPlayerSlot ? playerContainer : slotContainer;
         } else {
-            // From player to container
-            source = slot.container;
-            target = player.containerMenu.getSlot(0).container;
+            source = isPlayerSlot ? playerContainer : slotContainer;
+            target = isPlayerSlot ? slotContainer : playerContainer;
         }
 
         var e = new ContainerEvent.SlotChange.Moved.Before(source, target, slot);
@@ -99,14 +109,19 @@ public abstract class ServerGamePacketListenerImplMixin {
         Container source;
         Container target;
 
-        if (slot.container == player.getInventory()) {
-            // From container to player
-            source = player.containerMenu.getSlot(0).container;
-            target = slot.container;
+        Container playerContainer = player.getInventory();
+        Container slotContainer = player.containerMenu.getSlot(0).container;
+
+        boolean isPlayerSlot = p.getSlotNum() > slotContainer.getContainerSize() - 1;
+        // Pickup`fires AFTER picking or dropping
+        if (p.getChangedSlots().size() ==  1) {
+            // Player just picked/dropped the carried item
+            boolean dropped = p.getCarriedItem() == ItemStack.EMPTY;
+            source = dropped || isPlayerSlot ? playerContainer : slotContainer;
+            target = !dropped || isPlayerSlot ? playerContainer : slotContainer;
         } else {
-            // From player to container
-            source = slot.container;
-            target = player.containerMenu.getSlot(0).container;
+            source = isPlayerSlot ? playerContainer : slotContainer;
+            target = isPlayerSlot ? slotContainer : playerContainer;
         }
 
         var e = new ContainerEvent.SlotChange.Moved.After(source, target, slot);

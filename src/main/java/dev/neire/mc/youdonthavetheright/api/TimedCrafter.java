@@ -1,6 +1,5 @@
 package dev.neire.mc.youdonthavetheright.api;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.RecipeHolder;
@@ -12,15 +11,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 public interface TimedCrafter<T extends Container> extends RecipeHolder, Container {
+    boolean jumpstart();
     boolean isRunning();
+    Level getLevel();
     int getRunway();
     void setRunway(int runway);
     Recipe<T> getCurrentRecipe();
-    void setCurrentRecipe(Recipe<T> recipe, ICapabilityProvider owner);
+    void setCurrentRecipe(Recipe<T> recipe);
     int getProgress();
     void setProgress(int progress);
     Recipe<T> calculateRecipe();
     NonNullList<ItemStack> getItems();
-    void updateState(Level level, BlockPos pos, BlockState state);
+    void updateState(Level level, BlockState state);
     RecipeType<Recipe<T>> getRecipeType();
 }

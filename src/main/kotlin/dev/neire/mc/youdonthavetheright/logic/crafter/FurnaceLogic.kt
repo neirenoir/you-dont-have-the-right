@@ -1,8 +1,7 @@
 package dev.neire.mc.youdonthavetheright.logic.crafter
 
-import dev.neire.mc.youdonthavetheright.api.TimedCrafter
+import dev.neire.mc.youdonthavetheright.api.crafter.TimedCrafter
 import dev.neire.mc.youdonthavetheright.event.inventory.ContainerEvent
-import net.minecraft.commands.arguments.coordinates.BlockPosArgument.getBlockPos
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.Container
@@ -10,14 +9,12 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.AbstractCookingRecipe
 import net.minecraft.world.item.crafting.Recipe
-import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.AbstractFurnaceBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity
 import net.minecraftforge.common.ForgeHooks
 import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber
 
 const val INPUT_SLOT = 0
 const val FUEL_SLOT = 1
@@ -137,69 +134,5 @@ object FurnaceLogic {
         val newState = state.setValue(AbstractFurnaceBlock.LIT, lit)
         furnace.level.setBlock(pos, newState, 3)
         furnace.updateState(furnace.level, newState);
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <C : Container> recalculateRecipe(
-        crafter: TimedCrafter<C>,
-        player: ServerPlayer?
-    ): Recipe<C>? {
-        val recipes =
-            crafter.level.recipeManager.getRecipesFor(
-                crafter.recipeType,
-                crafter as C,
-                crafter.level
-            )
-        val candidateRecipe =
-            if (player != null)
-                recipes.firstOrNull { r -> player.recipeBook.contains(r) }
-            else
-                recipes.firstOrNull()
-        val registryAccess = crafter.level.registryAccess()
-        val currentRecipeIngredients = crafter.currentRecipe?.ingredients?.first()?.items
-        val candidateRecipeIngredients = candidateRecipe?.ingredients?.first()?.items
-
-        // Check if inputs are still compatible
-        if (
-            currentRecipeIngredients != null && candidateRecipeIngredients != null
-            && currentRecipeIngredients.contentEquals(candidateRecipeIngredients)
-        ) {
-            // If the inputs are the same, the current player is merely "refilling"
-            // the crafter
-            // We will only change the recipe if the output is different
-            val currentResultItem = crafter.currentRecipe.getResultItem(registryAccess)
-            val candidateResultItem = candidateRecipe.getResultItem(registryAccess)
-            if (currentResultItem.`is`(candidateResultItem.item)) {
-                // They are the same. Pick the larger output of the two
-                return if (currentResultItem.count > candidateResultItem.count)
-                    crafter.currentRecipe
-                else
-                    candidateRecipe
-            }
-        }
-
-        return candidateRecipe
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    @SubscribeEvent
-    fun <T : Container> handleItemInserted(event: ContainerEvent.SlotChange.Moved.After) {
-        val timedCrafter: TimedCrafter<T>? = when {
-            event.source is TimedCrafter<*> -> event.source as TimedCrafter<T>
-            event.target is TimedCrafter<*> -> event.target as TimedCrafter<T>
-            else -> null
-        }
-
-        if (timedCrafter == null) {
-            return
-        }
-
-        val player = event.getInvolvedPlayer()
-
-        // TODO: proximity!
-
-        timedCrafter.setCurrentRecipe(
-            recalculateRecipe(timedCrafter as TimedCrafter<T>, player as ServerPlayer)
-        )
     }
 }

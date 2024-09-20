@@ -1,4 +1,4 @@
-package dev.neire.mc.youdonthavetheright.api;
+package dev.neire.mc.youdonthavetheright.api.crafter;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
@@ -8,7 +8,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 public interface TimedCrafter<T extends Container> extends RecipeHolder, Container {
     boolean jumpstart();

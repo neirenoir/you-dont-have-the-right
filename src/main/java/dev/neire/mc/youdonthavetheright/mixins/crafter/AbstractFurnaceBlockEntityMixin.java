@@ -1,6 +1,6 @@
 package dev.neire.mc.youdonthavetheright.mixins.crafter;
 
-import dev.neire.mc.youdonthavetheright.api.TimedCrafter;
+import dev.neire.mc.youdonthavetheright.api.crafter.TimedCrafter;
 import dev.neire.mc.youdonthavetheright.logic.crafter.FurnaceLogic;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -82,7 +82,7 @@ public abstract class
             return;
         }
 
-        // This will get overrode by the After part of the SlotChange event
+        // This will get overridden by the After part of the SlotChange event
         // if it was initiated by a player
         setCurrentRecipe(newRecipe.get());
 
@@ -94,16 +94,6 @@ public abstract class
         setCurrentRecipe(null);
     }
 
-    /*
-    @Inject(at = @At("TAIL"), method = "removeItem")
-    private void removedItem(int i, int j, CallbackInfoReturnable<ItemStack> ci) {
-        // FIXME: if, for some unholy reason, the selected recipe consumes more than one
-        //        ingredient, this may not invalidate the recipe correctly
-        if (getItem(0).isEmpty()) {
-            setCurrentRecipe(null, null);
-        }
-    }
-*/
     @Unique @Override
     public boolean jumpstart() {
         if (level == null) {
@@ -118,7 +108,7 @@ public abstract class
             ) && !isRunning() && recipe != null
         ) {
             // FIXME: this will consume fuel even if the recipe is later
-            //        overrode by the player's recipes later
+            //        overridden by the player's recipes later
             FurnaceLogic.INSTANCE.refuel(this);
             FurnaceLogic.INSTANCE.setLitBlockState(
                 this, getBlockState(), getBlockPos(), true

@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -39,7 +40,7 @@ public abstract class
     @Shadow int litTime;
     @Shadow int cookingProgress;
     @Shadow protected NonNullList<ItemStack> items;
-    @Shadow @Final private RecipeType<Recipe<AbstractFurnaceBlockEntity>> recipeType;
+    @Final @Shadow private RecipeType<Recipe<AbstractFurnaceBlockEntity>> recipeType;
 
     @Shadow public abstract ItemStack getItem(int p_58328_);
 
@@ -68,11 +69,10 @@ public abstract class
         }
 
         RecipeManager recipeManager = level.getRecipeManager();
-        RegistryAccess registryAccess = level.registryAccess();
 
         Optional<Recipe<AbstractFurnaceBlockEntity>> newRecipe =
             recipeManager.getRecipeFor(
-                recipeType,
+                getRecipeType(),
                 (AbstractFurnaceBlockEntity) (Object) this,
                 level
             );
@@ -160,17 +160,12 @@ public abstract class
     }
 
     @Unique @Override
-    public Recipe<AbstractFurnaceBlockEntity> calculateRecipe() {
-        return null;
-    }
-
-    @Unique @Override
     public NonNullList<ItemStack> getItems() {
         return items;
     }
 
     @Unique @Override
-    public void updateState(Level level, BlockState s) {
+    public void updateState(BlockState s) {
         setChanged(level, getBlockPos(), s);
     }
 

@@ -4,13 +4,13 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.mojang.brigadier.StringReader
 import dev.neire.mc.youdonthavetheright.datagen.BrewingRecipeBuilder.Companion.DATA_TAG
+import dev.neire.mc.youdonthavetheright.logic.crafter.BrewingLogic
 import net.minecraft.core.NonNullList
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.TagParser
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.GsonHelper
-import net.minecraft.world.Container
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.*
 import net.minecraft.world.level.Level
@@ -20,15 +20,28 @@ class RecipeBrewingRecipe(
     private val id: ResourceLocation,
     private val group: String,
     private val category: BrewingBookCategory,
-    private val ingredients: List<Ingredient>,
+    private val ingredients: MutableList<Ingredient>,
     private val result: ItemStack
-) : Recipe<Container> {
-    override fun matches(container: Container, level: Level): Boolean {
-        TODO() // matches any?
-        //return ingredient.test(p_43748_.getItem(0))
+) : Recipe<BrewingLogic.VirtualBrewingStandView> {
+    init {
+        ingredients.sortBy { i -> i.items[0].displayName.string }
     }
 
-    override fun assemble(container: Container, registryAccess: RegistryAccess): ItemStack {
+    override fun matches(container: BrewingLogic.VirtualBrewingStandView, level: Level): Boolean {
+        val usedIngredients = container.getIngredients()
+        if (usedIngredients.size != this.ingredients.size) {
+            return false;
+        }
+        for (i in 0 until usedIngredients.size) {
+            val copySingle = usedIngredients[i].copyWithCount(this.ingredients[i].items[0].count)
+            if (!copySingle.equals(this.ingredients[i].items[0], true)) {
+                return false
+            }
+        }
+        return true
+    }
+
+    override fun assemble(container: BrewingLogic.VirtualBrewingStandView, registryAccess: RegistryAccess): ItemStack {
         return result.copy()
     }
 
@@ -86,7 +99,7 @@ class RecipeBrewingRecipe(
             val ingredients =
                 itemsFromJson(GsonHelper.getAsJsonArray(jsonObject, "ingredients"))
             val itemStack =
-                ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(jsonObject, "result"))
+                itemStackFromJson(GsonHelper.getAsJsonObject(jsonObject, "result"))
             return RecipeBrewingRecipe(id, group!!, category, ingredients, itemStack)
         }
 
@@ -125,26 +138,34 @@ class RecipeBrewingRecipe(
             val parsedIngredients = NonNullList.create<Ingredient>()
 
             for (i in 0 until ingredients.size()) {
-                val item =
-                    ForgeRegistries.ITEMS.getValue(
-                        ResourceLocation((ingredients[i] as JsonObject).get("item").asString)
-                    )?.let {
-                        ItemStack(it, 1)
-                    }
-                val potionData =
-                    if (ingredients[i].asJsonObject.has("data"))
-                        ingredients[i].asJsonObject
-                            .get(DATA_TAG).toString()
-                    else null
-
-                if (potionData != null && item != null) {
-                    item.tag = TagParser(StringReader(potionData)).readStruct()
-                }
-
-                parsedIngredients.add(Ingredient.of(item))
+                parsedIngredients.add(Ingredient.of(itemStackFromJson(ingredients[i].asJsonObject)))
             }
 
             return parsedIngredients
+        }
+
+        private fun itemStackFromJson(jsonObject: JsonObject): ItemStack {
+            val item =
+                ForgeRegistries.ITEMS.getValue(
+                    ResourceLocation((jsonObject).get("item").asString)
+                )?.let {
+                    ItemStack(it, 1)
+                }
+
+            if (item == null) {
+                throw NullPointerException()
+            }
+
+            val potionData =
+                if (jsonObject.has("data"))
+                    jsonObject.get(DATA_TAG).toString()
+                else null
+
+            if (potionData != null) {
+                item.tag = TagParser(StringReader(potionData)).readStruct()
+            }
+
+            return item
         }
     }
 }

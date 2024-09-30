@@ -1,32 +1,27 @@
 package dev.neire.mc.youdonthavetheright.logic.crafter
 
 import dev.neire.mc.youdonthavetheright.api.crafter.TimedCrafter
-import dev.neire.mc.youdonthavetheright.event.inventory.ContainerEvent
 import net.minecraft.core.BlockPos
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.Container
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.AbstractCookingRecipe
-import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.block.AbstractFurnaceBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity
 import net.minecraftforge.common.ForgeHooks
-import net.minecraftforge.eventbus.api.SubscribeEvent
 
-const val INPUT_SLOT = 0
-const val FUEL_SLOT = 1
-const val OUTPUT_SLOT = 2
+
 object FurnaceLogic {
+    const val INPUT_SLOT = 0
+    const val FUEL_SLOT = 1
+    const val OUTPUT_SLOT = 2
     fun tickLogic(
         pos: BlockPos,
         s: BlockState,
         furnace: TimedCrafter<AbstractFurnaceBlockEntity>
     ) {
         if (!furnace.isRunning) {
-            // If a valid recipe was inserted, the runway should be at least 1
             return
         }
 
@@ -133,6 +128,8 @@ object FurnaceLogic {
     ) {
         val newState = state.setValue(AbstractFurnaceBlock.LIT, lit)
         furnace.level.setBlock(pos, newState, 3)
-        furnace.updateState(furnace.level, newState);
+        furnace.updateState(newState);
     }
+
+    // TODO: save recipe to NBT!
 }

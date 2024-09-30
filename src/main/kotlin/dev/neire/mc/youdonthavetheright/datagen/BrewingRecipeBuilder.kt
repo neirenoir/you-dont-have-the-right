@@ -9,11 +9,9 @@ import net.minecraft.advancements.AdvancementRewards
 import net.minecraft.advancements.CriterionTriggerInstance
 import net.minecraft.advancements.RequirementsStrategy
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.data.recipes.RecipeBuilder
 import net.minecraft.data.recipes.RecipeCategory
-import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -86,13 +84,11 @@ class BrewingRecipeBuilder private constructor(
                 )
 
                 if (ingredient.hasTag()) {
-                    val jsonTags = JsonObject()
                     val jsonPotion = JsonObject()
                     jsonPotion.addProperty(
                         "Potion", ingredient.tag?.get("Potion")?.asString
                     )
-                    jsonTags.add("tag", jsonPotion)
-                    jsonIngredient.add(DATA_TAG, jsonTags)
+                    jsonIngredient.add(DATA_TAG, jsonPotion)
                 }
 
                 jsonIngredients.add(jsonIngredient)
@@ -112,14 +108,12 @@ class BrewingRecipeBuilder private constructor(
             )
 
             if (result.hasTag()) {
-                val jsonTags = JsonObject()
                 val jsonPotion = JsonObject()
 
                 jsonPotion.addProperty(
                     "Potion", result.tag?.get("Potion")?.asString
                 )
-                jsonTags.add("tag", jsonPotion)
-                jsonResult.add(DATA_TAG, jsonTags)
+                jsonResult.add(DATA_TAG, jsonPotion)
             }
 
             json.add("result", jsonResult)

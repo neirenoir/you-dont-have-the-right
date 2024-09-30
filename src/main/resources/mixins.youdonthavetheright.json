@@ -6,6 +6,7 @@
   "refmap": "mixins.youdonthavetheright.refmap.json",
   "mixins": [
     "crafter.AbstractFurnaceBlockEntityMixin",
+    "crafter.BrewingStandBlockEntityMixin",
     "crafter.PotionBrewingAccessor",
     "divineinspiration.AbstractFurnaceBlockEntityRecipeHolderMixin",
     "divineinspiration.AdvancementRewardsMixin",

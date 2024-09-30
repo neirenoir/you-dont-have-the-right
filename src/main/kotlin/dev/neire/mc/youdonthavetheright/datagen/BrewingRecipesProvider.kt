@@ -7,12 +7,11 @@ import net.minecraft.data.PackOutput
 import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potion
 import net.minecraft.world.item.alchemy.PotionUtils
-import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.alchemy.Potions
 import net.minecraftforge.data.event.GatherDataEvent
 import net.minecraftforge.registries.ForgeRegistries
 import java.util.function.Consumer
@@ -111,8 +110,8 @@ class BrewingRecipesProvider(packOutput: PackOutput) : RecipeProvider(packOutput
 
         PotionBrewingAccessor.getContainerMixes().forEach { mix ->
             try {
-                val input = ItemStack(mix.from.get(),1)
-                val output = ItemStack(mix.to.get(), 1)
+                val input = PotionUtils.setPotion(ItemStack(Items.POTION), Potions.WATER)
+                val output = PotionUtils.setPotion(ItemStack(mix.to.get()), Potions.WATER)
                 val ingredient = ItemStack(mix.ingredient.items.first().item, 1)
 
                 BrewingRecipeBuilder

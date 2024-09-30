@@ -6,6 +6,7 @@ import dev.neire.mc.youdonthavetheright.event.inventory.ContainerEvent
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.Container
 import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.level.block.entity.BrewingStandBlockEntity
 import net.minecraftforge.common.capabilities.ICapabilityProvider
 import net.minecraftforge.eventbus.api.SubscribeEvent
 
@@ -68,7 +69,7 @@ object CommonLogic {
             else -> null
         }
 
-        if (timedCrafter == null) {
+        if (timedCrafter == null || timedCrafter is BrewingStandBlockEntity) {
             return
         }
 
@@ -77,7 +78,7 @@ object CommonLogic {
         // TODO: proximity!
 
         timedCrafter.setCurrentRecipe(
-            recalculateRecipe(timedCrafter as TimedCrafter<T>, player as ServerPlayer)
+            recalculateRecipe(timedCrafter, player as ServerPlayer)
         )
     }
 }

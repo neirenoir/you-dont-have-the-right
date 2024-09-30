@@ -3,12 +3,15 @@ package dev.neire.mc.youdonthavetheright.recipebook
 import dev.neire.mc.youdonthavetheright.YouDontHaveTheRight
 import dev.neire.mc.youdonthavetheright.api.capability.RecipeBibleCapability
 import dev.neire.mc.youdonthavetheright.api.capability.YdhtrCapabilities.RECIPE_BIBLE_CAPABILITY
+import dev.neire.mc.youdonthavetheright.logic.crafter.BrewingLogic
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.level.block.entity.BrewingStandBlockEntity
 import net.minecraftforge.common.brewing.BrewingRecipe
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.ICapabilityProvider
@@ -20,7 +23,7 @@ import net.minecraftforge.registries.RegisterEvent
 
 
 object RecipeBookLogic {
-    var BREWING_RECIPE_TYPE: RecipeType<RecipeBrewingRecipe>? = null
+    var BREWING_RECIPE_TYPE: RecipeType<Recipe<BrewingLogic.VirtualBrewingStandView>>? = null
     val BREWING_RECIPE_TYPE_KEY = "brewing"
 
     @SubscribeEvent
@@ -74,6 +77,6 @@ object RecipeBookLogic {
         BREWING_RECIPE_TYPE =
             BuiltInRegistries.RECIPE_TYPE.get(
                 ResourceLocation(BREWING_RECIPE_TYPE_KEY)
-            ) as RecipeType<RecipeBrewingRecipe>
+            ) as RecipeType<Recipe<BrewingLogic.VirtualBrewingStandView>>
     }
 }

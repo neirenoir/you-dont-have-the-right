@@ -27,7 +27,7 @@ object FurnaceLogic {
 
         furnace.runway = (--furnace.runway).coerceAtLeast(0)
 
-        if (furnace.currentRecipe == null) {
+        if (furnace.getCurrentRecipe(0) == null) {
             if (furnace.runway == 0) {
                 setLitBlockState(furnace, s, pos, false)
             }
@@ -36,7 +36,7 @@ object FurnaceLogic {
         }
 
         val recipeResult =
-            furnace.currentRecipe.getResultItem(furnace.level.registryAccess())
+            furnace.getCurrentRecipe(0).getResultItem(furnace.level.registryAccess())
 
         // Is the output unobstructed?
         if (!shouldStep(furnace, recipeResult)) {
@@ -55,18 +55,18 @@ object FurnaceLogic {
 
         furnace.progress = Math.min(
             ++furnace.progress,
-            (furnace.currentRecipe as AbstractCookingRecipe).cookingTime
+            (furnace.getCurrentRecipe(0) as AbstractCookingRecipe).cookingTime
         )
-        if (furnace.progress == (furnace.currentRecipe as AbstractCookingRecipe).cookingTime
+        if (furnace.progress == (furnace.getCurrentRecipe(0) as AbstractCookingRecipe).cookingTime
             && furnace.items[OUTPUT_SLOT].count + recipeResult.count <= recipeResult.maxStackSize) {
             burn(furnace, recipeResult)
             furnace.progress = 0
-            furnace.recipeUsed = furnace.currentRecipe
+            furnace.recipeUsed = furnace.getCurrentRecipe(0)
         }
     }
 
     fun refuel(furnace: TimedCrafter<AbstractFurnaceBlockEntity>) {
-        if (furnace.currentRecipe == null) {
+        if (furnace.getCurrentRecipe(0) == null) {
             return;
         }
 

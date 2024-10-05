@@ -2,16 +2,18 @@ package dev.neire.mc.youdonthavetheright.mixins.crafter;
 
 import dev.neire.mc.youdonthavetheright.api.crafter.TimedCrafter;
 import dev.neire.mc.youdonthavetheright.logic.crafter.FurnaceLogic;
+import dev.neire.mc.youdonthavetheright.recipebook.WorldRecipeBook;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,7 +28,7 @@ import java.util.Optional;
 @Mixin(AbstractFurnaceBlockEntity.class)
 public abstract class
     AbstractFurnaceBlockEntityMixin
-    extends BlockEntity
+    extends BaseContainerBlockEntity
     implements TimedCrafter<AbstractFurnaceBlockEntity>
 {
     private AbstractFurnaceBlockEntityMixin(
@@ -70,7 +72,7 @@ public abstract class
 
         RecipeManager recipeManager = level.getRecipeManager();
 
-        Optional<Recipe<AbstractFurnaceBlockEntity>> newRecipe =
+        final Optional<Recipe<AbstractFurnaceBlockEntity>> newRecipe =
             recipeManager.getRecipeFor(
                 getRecipeType(),
                 (AbstractFurnaceBlockEntity) (Object) this,
@@ -78,20 +80,31 @@ public abstract class
             );
 
         if (newRecipe.isEmpty()) {
-            setCurrentRecipe(null);
+            setCurrentRecipe(0,null);
+            return;
+        }
+
+        if (!(level instanceof ServerLevel)) {
             return;
         }
 
         // This will get overridden by the After part of the SlotChange event
         // if it was initiated by a player
-        setCurrentRecipe(newRecipe.get());
+        final var selectedRecipe =
+            WorldRecipeBook.Companion.capability((ServerLevel) level)
+                .filter(
+                    (cap) -> cap.hasRecipe(newRecipe.get().getId())
+                ).map(
+                    (cap) -> newRecipe.get()
+                ).orElse(null);
+        setCurrentRecipe(0, selectedRecipe);
 
         jumpstart();
     }
 
     @Inject(at = @At("TAIL"), method = "clearContent")
     private void contentCleared(CallbackInfo ci) {
-        setCurrentRecipe(null);
+        setCurrentRecipe(0, null);
     }
 
     @Unique @Override
@@ -101,7 +114,7 @@ public abstract class
         }
 
         RegistryAccess registryAccess = level.registryAccess();
-        var recipe = getCurrentRecipe();
+        var recipe = getCurrentRecipe(0);
         if (
             FurnaceLogic.INSTANCE.shouldStep(
             this, recipe != null ? recipe.getResultItem(registryAccess) : ItemStack.EMPTY
@@ -119,7 +132,7 @@ public abstract class
         return false;
     }
 
-    @Unique
+    @Unique @Override
     public boolean isRunning() {
         return isLit();
     }
@@ -150,12 +163,12 @@ public abstract class
     }
 
     @Unique @Override
-    public Recipe<AbstractFurnaceBlockEntity> getCurrentRecipe() {
+    public Recipe<AbstractFurnaceBlockEntity> getCurrentRecipe(int slot) {
         return you_dont_have_the_right$selectedRecipe;
     }
 
     @Unique @Override
-    public void setCurrentRecipe(Recipe<AbstractFurnaceBlockEntity> recipe) {
+    public void setCurrentRecipe(int slot, Recipe<AbstractFurnaceBlockEntity> recipe) {
         you_dont_have_the_right$selectedRecipe = recipe;
     }
 
@@ -173,4 +186,5 @@ public abstract class
     public RecipeType<Recipe<AbstractFurnaceBlockEntity>> getRecipeType() {
         return recipeType;
     }
+
 }

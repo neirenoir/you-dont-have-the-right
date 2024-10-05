@@ -1,6 +1,5 @@
 package dev.neire.mc.youdonthavetheright.logic.crafter
 
-import dev.neire.mc.youdonthavetheright.api.crafter.MultiTimedCrafter
 import dev.neire.mc.youdonthavetheright.api.crafter.PotionBits
 import dev.neire.mc.youdonthavetheright.api.crafter.TimedCrafter
 import dev.neire.mc.youdonthavetheright.logic.crafter.BrewingLogic.VirtualBrewingStandView.Companion.from
@@ -19,7 +18,6 @@ import net.minecraft.world.level.block.BrewingStandBlock
 import net.minecraft.world.level.block.entity.BrewingStandBlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.event.ForgeEventFactory
-import java.util.function.Consumer
 import kotlin.experimental.and
 import kotlin.properties.Delegates
 
@@ -53,7 +51,7 @@ object BrewingLogic {
         }
 
         val anyBrewable = virtualBrewingStands
-            .map { stand -> if (stand.currentRecipe != null) 1 else 0 }
+            .map { stand -> if (stand.getCurrentRecipe(0) != null) 1 else 0 }
             .reduce { acc, stand -> (acc shl 1) or stand } > 0;
         if (brewingStand.progress > 0) {
             brewingStand.progress--
@@ -62,12 +60,11 @@ object BrewingLogic {
                 brewingStand.updateState(state)
             } else if (!anyBrewable) {
                 brewingStand.progress = 0
-                brewingStand.updateState(state)
             }
         } else if (anyBrewable) {
             --brewingStand.runway
             brewingStand.progress = 400
-            // The double updateState is intentional. Don't ask.
+            // Yes, the double updateState is intentional. Don't ask.
             brewingStand.updateState(state)
             brewingStand.updateState(state)
         }
@@ -84,11 +81,11 @@ object BrewingLogic {
 
         val registry = brewingStand.level.registryAccess()
         for (brewingView in view) {
-            val currentRecipe = brewingView.currentRecipe ?: continue
+            val currentRecipe = brewingView.getCurrentRecipe(0) ?: continue
 
             if ((currentRecipe as RecipeBrewingRecipe).matches(brewingView, brewingStand.level)) {
                 brewingView.setResult(
-                    brewingView.currentRecipe!!.getResultItem(registry).copy()
+                    brewingView.getCurrentRecipe(0)!!.getResultItem(registry).copy()
                 )
             }
         }
@@ -151,7 +148,7 @@ object BrewingLogic {
         }
     }
 
-    class VirtualBrewingStandView: TimedCrafter<BrewingStandBlockEntity> {
+    class VirtualBrewingStandView: TimedCrafter<VirtualBrewingStandView> {
         lateinit var parentBrewingStand: BrewingStandBlockEntity
         var slot by Delegates.notNull<Int>()
 
@@ -189,14 +186,14 @@ object BrewingLogic {
                 )
 
             if (newRecipe.isEmpty) {
-                currentRecipe = null
+                setCurrentRecipe(0, null)
                 return
             }
 
 
             // This will get overridden by the After part of the SlotChange event
             // if it was initiated by a player
-            currentRecipe = newRecipe.get() as Recipe<BrewingStandBlockEntity>
+            setCurrentRecipe(0, newRecipe.get() as Recipe<VirtualBrewingStandView>)
         }
 
         fun setResult(result: ItemStack) {
@@ -208,35 +205,35 @@ object BrewingLogic {
         }
 
         override fun isRunning(): Boolean {
-            return getMultiTimedCrafter().currentRecipes[slot] != null
+            return getCurrentRecipe(0) != null
         }
 
-        override fun getLevel(): Level {
-            return getMultiTimedCrafter().level
+        override fun getLevel(): Level? {
+            return parentBrewingStand.level
         }
 
         override fun getRunway(): Int {
-            return getMultiTimedCrafter().runway
+            return getParentTimedCrafter().runway
         }
 
         override fun setRunway(runway: Int) {
-            getMultiTimedCrafter().runway = runway
+            getParentTimedCrafter().runway = runway
         }
 
-        override fun getCurrentRecipe(): Recipe<BrewingStandBlockEntity>? {
-            return getMultiTimedCrafter().currentRecipes[slot]
+        override fun getCurrentRecipe(slot: Int): Recipe<VirtualBrewingStandView>? {
+            return getParentTimedCrafter().getCurrentRecipe(this.slot)
         }
 
         override fun getProgress(): Int {
-            return getMultiTimedCrafter().progress
+            return getParentTimedCrafter().progress
         }
 
         override fun setProgress(progress: Int) {
-            getMultiTimedCrafter().progress = progress
+            getParentTimedCrafter().progress = progress
         }
 
         override fun getItems(): NonNullList<ItemStack> {
-            val b = getMultiTimedCrafter()
+            val b = getParentTimedCrafter()
             return NonNullList.of(b.items[slot], b.items[INGREDIENT_SLOT], b.items[FUEL_SLOT])
         }
 
@@ -251,26 +248,27 @@ object BrewingLogic {
         }
 
         override fun updateState(state: BlockState?) {
-            getMultiTimedCrafter().updateState(state)
+            getParentTimedCrafter().updateState(state)
         }
 
-        override fun getRecipeType(): RecipeType<Recipe<BrewingStandBlockEntity>> {
-            return getMultiTimedCrafter().recipeType
+        override fun getRecipeType(): RecipeType<Recipe<VirtualBrewingStandView>> {
+            return getParentTimedCrafter().recipeType
         }
 
-        override fun setCurrentRecipe(recipe: Recipe<BrewingStandBlockEntity>?) {
-            getMultiTimedCrafter().currentRecipes[slot] = recipe
+        override fun setCurrentRecipe(slot: Int, recipe: Recipe<VirtualBrewingStandView>?) {
+            getParentTimedCrafter().setCurrentRecipe(this.slot, recipe)
         }
 
         // region RecipeContainer
         override fun setRecipeUsed(recipe: Recipe<*>?) {
             @Suppress("UNCHECKED_CAST")
-            getMultiTimedCrafter().currentRecipes[slot] =
-                recipe as Recipe<BrewingStandBlockEntity>?
+            getParentTimedCrafter().setCurrentRecipe(
+                slot, recipe as Recipe<VirtualBrewingStandView>
+            )
         }
 
         override fun getRecipeUsed(): Recipe<*>? {
-            return getMultiTimedCrafter().currentRecipes[slot]
+            return getParentTimedCrafter().getCurrentRecipe(slot)
         }
         // endregion
 
@@ -325,9 +323,9 @@ object BrewingLogic {
             }
         }
 
-        private fun getMultiTimedCrafter(): MultiTimedCrafter<BrewingStandBlockEntity> {
+        private fun getParentTimedCrafter(): TimedCrafter<VirtualBrewingStandView> {
             @Suppress("UNCHECKED_CAST")
-            return parentBrewingStand as MultiTimedCrafter<BrewingStandBlockEntity>
+            return (parentBrewingStand as TimedCrafter<VirtualBrewingStandView>)
         }
 
     }

@@ -1,5 +1,6 @@
 package dev.neire.mc.youdonthavetheright.api.crafter;
 
+import dev.neire.mc.youdonthavetheright.api.capability.RecipeContainerCapability;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.RecipeHolder;
@@ -15,8 +16,8 @@ public interface TimedCrafter<T extends Container> extends RecipeHolder, Contain
     Level getLevel();
     int getRunway();
     void setRunway(int runway);
-    Recipe<T> getCurrentRecipe();
-    void setCurrentRecipe(Recipe<T> recipe);
+    Recipe<T> getCurrentRecipe(int slot);
+    void setCurrentRecipe(int slot, Recipe<T> recipe);
     int getProgress();
     void setProgress(int progress);
     NonNullList<ItemStack> getItems();

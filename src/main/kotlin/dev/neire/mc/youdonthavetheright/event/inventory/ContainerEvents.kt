@@ -7,11 +7,11 @@ import net.minecraft.world.inventory.Slot
 import net.minecraftforge.eventbus.api.Cancelable
 import net.minecraftforge.eventbus.api.Event
 
-open class ContainerEvent(open val source: Container): Event() {
+open class ContainerEvents(open val source: Container): Event() {
     open class SlotChange(
         override val source: Container,
         open val slot: Slot,
-    ): ContainerEvent(source) {
+    ): ContainerEvents(source) {
         abstract class Moved (
             override val source: Container,
             open val target: Container,

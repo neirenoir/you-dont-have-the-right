@@ -12,7 +12,8 @@
     "divineinspiration.AdvancementRewardsMixin",
     "divineinspiration.GameRulesMixin",
     "divineinspiration.ResultContainerRecipeHolderMixin",
-    "event.inventory.ServerGamePacketListenerImplMixin"
+    "event.inventory.ServerGamePacketListenerImplMixin",
+    "event.recipe.RecipeBookMixin"
   ],
   "server": [
   ],

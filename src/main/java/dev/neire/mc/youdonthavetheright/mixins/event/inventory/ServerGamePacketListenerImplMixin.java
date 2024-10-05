@@ -1,14 +1,12 @@
 package dev.neire.mc.youdonthavetheright.mixins.event.inventory;
 
-import dev.neire.mc.youdonthavetheright.event.inventory.ContainerEvent;
+import dev.neire.mc.youdonthavetheright.event.inventory.ContainerEvents;
 import net.minecraft.network.protocol.game.ServerboundContainerClickPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.Container;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -69,7 +67,7 @@ public abstract class ServerGamePacketListenerImplMixin {
             target = isPlayerSlot ? slotContainer : playerContainer;
         }
 
-        var e = new ContainerEvent.SlotChange.Moved.Before(source, target, slot);
+        var e = new ContainerEvents.SlotChange.Moved.Before(source, target, slot);
         MinecraftForge.EVENT_BUS.post(e);
 
         if (e.isCanceled()) {
@@ -124,7 +122,7 @@ public abstract class ServerGamePacketListenerImplMixin {
             target = isPlayerSlot ? slotContainer : playerContainer;
         }
 
-        var e = new ContainerEvent.SlotChange.Moved.After(source, target, slot);
+        var e = new ContainerEvents.SlotChange.Moved.After(source, target, slot);
         MinecraftForge.EVENT_BUS.post(e);
     }
 

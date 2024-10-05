@@ -1,6 +1,5 @@
 package dev.neire.mc.youdonthavetheright.mixins.crafter;
 
-import dev.neire.mc.youdonthavetheright.api.crafter.MultiTimedCrafter;
 import dev.neire.mc.youdonthavetheright.api.crafter.PotionBits;
 import dev.neire.mc.youdonthavetheright.api.crafter.TimedCrafter;
 import dev.neire.mc.youdonthavetheright.logic.crafter.BrewingLogic;
@@ -30,7 +29,7 @@ import java.util.List;
 @Mixin(BrewingStandBlockEntity.class)
 public abstract class BrewingStandBlockEntityMixin
     extends BlockEntity
-    implements MultiTimedCrafter<BrewingLogic.VirtualBrewingStandView>, PotionBits
+    implements TimedCrafter<BrewingLogic.VirtualBrewingStandView>, PotionBits
 {
     @Shadow
     int brewTime;
@@ -57,8 +56,7 @@ public abstract class BrewingStandBlockEntityMixin
         you_dont_have_the_right$selectedRecipes.add(null);
         you_dont_have_the_right$selectedRecipes.add(null);
     }
-
-
+    
     /**
      * @author Neirenoir
      * @reason fast as fucc boiiiiii
@@ -95,7 +93,9 @@ public abstract class BrewingStandBlockEntityMixin
 
     @Inject(at = @At("TAIL"), method = "clearContent")
     private void contentCleared(CallbackInfo ci) {
-        setCurrentRecipe(null);
+        setCurrentRecipe(0, null);
+        setCurrentRecipe(1, null);
+        setCurrentRecipe(2, null);
     }
 
     @Override
@@ -124,8 +124,13 @@ public abstract class BrewingStandBlockEntityMixin
     }
 
     @Override
-    public List<Recipe<BrewingLogic.VirtualBrewingStandView>> getCurrentRecipes() {
-        return you_dont_have_the_right$selectedRecipes;
+    public Recipe<BrewingLogic.VirtualBrewingStandView> getCurrentRecipe(int slot) {
+        return you_dont_have_the_right$selectedRecipes.get(slot);
+    }
+
+    @Override
+    public void setCurrentRecipe(int slot, Recipe<BrewingLogic.VirtualBrewingStandView> recipe) {
+        you_dont_have_the_right$selectedRecipes.set(slot, recipe);
     }
 
     @Override
@@ -162,4 +167,5 @@ public abstract class BrewingStandBlockEntityMixin
     public void setPotionBits(byte bits) {
         lastPotionBits = bits;
     }
+
 }

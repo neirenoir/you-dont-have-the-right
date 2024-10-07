@@ -35,19 +35,6 @@ object YouDontHaveTheRight {
     init {
         LOGGER.log(Level.INFO, "Initializing You Don't Have The Right")
 
-        // Register the KDeferredRegister to the mod-specific event bus
-        //ModBlocks.REGISTRY.register(MOD_BUS)
-
-        val obj = runForDist(
-            clientTarget = {
-                MOD_BUS.addListener(YouDontHaveTheRight::onClientSetup)
-                Minecraft.getInstance()
-            },
-            serverTarget = {
-                MOD_BUS.addListener(YouDontHaveTheRight::onServerSetup)
-                "test"
-            })
-
         // RecipeBook events
         MOD_BUS.addListener(RecipeBookLogic::registerBrewingRecipeType)
         MOD_BUS.addListener(BrewingRecipesEventListener::onGatherData)
@@ -57,21 +44,5 @@ object YouDontHaveTheRight {
         FORGE_BUS.register(CommonLogic)
 
         ModLoadingContext.get().registerConfig(Type.SERVER, YdhtrConfig.SPEC)
-    }
-
-    /**
-     * This is used for initializing client specific
-     * things such as renderers and keymaps
-     * Fired on the mod specific event bus.
-     */
-    private fun onClientSetup(event: FMLClientSetupEvent) {
-        LOGGER.log(Level.INFO, "Initializing client...")
-    }
-
-    /**
-     * Fired on the global Forge bus.
-     */
-    private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
-        LOGGER.log(Level.INFO, "Server starting...")
     }
 }

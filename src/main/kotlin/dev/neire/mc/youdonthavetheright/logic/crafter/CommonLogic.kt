@@ -13,7 +13,6 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.Container
 import net.minecraft.world.item.crafting.Recipe
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BrewingStandBlockEntity
 import net.minecraftforge.common.capabilities.ICapabilityProvider
 import net.minecraftforge.eventbus.api.SubscribeEvent
@@ -130,7 +129,7 @@ object CommonLogic {
         val recipeManager =
             crafter.level?.recipeManager ?:
             ServerLifecycleHooks.getCurrentServer().overworld().recipeManager
-        
+
         for (i in 0 until recipeList.size) {
             val recipeLocation = recipeList[i].asString
 

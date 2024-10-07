@@ -3,18 +3,14 @@ package dev.neire.mc.youdonthavetheright.recipebook
 import dev.neire.mc.youdonthavetheright.api.capability.RecipeBibleCapability
 import dev.neire.mc.youdonthavetheright.api.capability.YdhtrCapabilities.RECIPE_BIBLE_CAPABILITY
 import dev.neire.mc.youdonthavetheright.event.recipe.RecipeEvents
-import dev.neire.mc.youdonthavetheright.recipebook.WorldRecipeBook.Companion.getOrCreate
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.level.Level
 import net.minecraft.world.level.saveddata.SavedData
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.server.ServerLifecycleHooks
 import java.util.*
 

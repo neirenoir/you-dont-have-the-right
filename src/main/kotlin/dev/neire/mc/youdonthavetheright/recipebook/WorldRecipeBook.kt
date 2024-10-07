@@ -2,6 +2,7 @@ package dev.neire.mc.youdonthavetheright.recipebook
 
 import dev.neire.mc.youdonthavetheright.api.capability.RecipeBibleCapability
 import dev.neire.mc.youdonthavetheright.api.capability.YdhtrCapabilities.RECIPE_BIBLE_CAPABILITY
+import dev.neire.mc.youdonthavetheright.config.YdhtrConfig
 import dev.neire.mc.youdonthavetheright.event.recipe.RecipeEvents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
@@ -32,6 +33,10 @@ class WorldRecipeBook: SavedData() {
     }
 
     fun knows(recipe: ResourceLocation): Boolean {
+        if (!YdhtrConfig.FORCE_LIMITED_CRAFTING.get()) {
+            // THE WORLD ALWAYS KNOWS
+            return true;
+        }
         return worldRecipes.contains(recipe)
     }
 

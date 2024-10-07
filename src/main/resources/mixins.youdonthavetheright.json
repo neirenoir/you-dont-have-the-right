@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "dev.neire.mc.youdonthavetheright.mixins",
   "compatibilityLevel": "JAVA_17",
-  "refmap": "mixins.youdonthavetheright.refmap.json",
+  "refmap": "youdonthavetheright.refmap.json",
   "mixins": [
     "crafter.AbstractFurnaceBlockEntityMixin",
     "crafter.BrewingStandBlockEntityMixin",

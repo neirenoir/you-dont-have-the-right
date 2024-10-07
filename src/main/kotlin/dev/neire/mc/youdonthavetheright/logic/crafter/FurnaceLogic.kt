@@ -1,14 +1,20 @@
 package dev.neire.mc.youdonthavetheright.logic.crafter
 
+import dev.neire.mc.youdonthavetheright.api.capability.RecipeBibleCapability
 import dev.neire.mc.youdonthavetheright.api.crafter.TimedCrafter
+import dev.neire.mc.youdonthavetheright.config.YdhtrConfig
+import dev.neire.mc.youdonthavetheright.recipebook.WorldRecipeBook.Companion.capability
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.AbstractCookingRecipe
+import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeManager
 import net.minecraft.world.level.block.AbstractFurnaceBlock
-import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.common.ForgeHooks
 
 
@@ -131,5 +137,42 @@ object FurnaceLogic {
         furnace.updateState(newState);
     }
 
+    fun itemInserted(furnace: TimedCrafter<AbstractFurnaceBlockEntity>) {
+        val level = furnace.level ?: return
+
+        val recipeManager: RecipeManager = level.recipeManager
+
+        val newRecipe =
+            recipeManager
+                .getRecipeFor<AbstractFurnaceBlockEntity?, Recipe<AbstractFurnaceBlockEntity>>(
+                    furnace.recipeType,
+                    furnace as AbstractFurnaceBlockEntity,
+                    level
+                )
+
+        if (newRecipe.isEmpty) {
+            furnace.setCurrentRecipe(0, null)
+            return
+        }
+
+        if (level !is ServerLevel) {
+            return
+        }
+
+        // This will get overridden by the After part of the SlotChange event
+        // if it was initiated by a player
+        val selectedRecipe =
+            if (YdhtrConfig.ENABLE_WORLD_LEARNED_RECIPES.get()) {
+                capability(level)
+                    .filter { cap: RecipeBibleCapability -> cap.hasRecipe(newRecipe.get().id) }
+                    .map { newRecipe.get() }
+                    .orElse(null)
+            } else {
+                newRecipe.get()
+            }
+        furnace.setCurrentRecipe(0, selectedRecipe)
+
+        furnace.jumpstart()
+    }
     // TODO: save recipe to NBT!
 }

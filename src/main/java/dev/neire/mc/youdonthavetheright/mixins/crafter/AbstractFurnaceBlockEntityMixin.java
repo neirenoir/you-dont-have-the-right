@@ -1,11 +1,13 @@
 package dev.neire.mc.youdonthavetheright.mixins.crafter;
 
 import dev.neire.mc.youdonthavetheright.api.crafter.TimedCrafter;
+import dev.neire.mc.youdonthavetheright.logic.crafter.CommonLogic;
 import dev.neire.mc.youdonthavetheright.logic.crafter.FurnaceLogic;
 import dev.neire.mc.youdonthavetheright.recipebook.WorldRecipeBook;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -65,41 +67,7 @@ public abstract class
 
     @Inject(at = @At("TAIL"), method = "setItem")
     private void itemInserted(int slot, ItemStack stack, CallbackInfo ci) {
-        if (level == null) {
-            // I am not sure this could even happen
-            return;
-        }
-
-        RecipeManager recipeManager = level.getRecipeManager();
-
-        final Optional<Recipe<AbstractFurnaceBlockEntity>> newRecipe =
-            recipeManager.getRecipeFor(
-                getRecipeType(),
-                (AbstractFurnaceBlockEntity) (Object) this,
-                level
-            );
-
-        if (newRecipe.isEmpty()) {
-            setCurrentRecipe(0,null);
-            return;
-        }
-
-        if (!(level instanceof ServerLevel)) {
-            return;
-        }
-
-        // This will get overridden by the After part of the SlotChange event
-        // if it was initiated by a player
-        final var selectedRecipe =
-            WorldRecipeBook.Companion.capability((ServerLevel) level)
-                .filter(
-                    (cap) -> cap.hasRecipe(newRecipe.get().getId())
-                ).map(
-                    (cap) -> newRecipe.get()
-                ).orElse(null);
-        setCurrentRecipe(0, selectedRecipe);
-
-        jumpstart();
+        FurnaceLogic.INSTANCE.itemInserted(this);
     }
 
     @Inject(at = @At("TAIL"), method = "clearContent")
@@ -130,6 +98,16 @@ public abstract class
         }
 
         return false;
+    }
+
+    @Inject(at = @At("TAIL"), method = "saveAdditional")
+    private void onSaveAdditional(CompoundTag tag, CallbackInfo ci) {
+        CommonLogic.INSTANCE.saveAdditionalData(tag, this);
+    }
+
+    @Inject(at = @At("TAIL"), method = "load")
+    private void onLoadAdditional(CompoundTag tag, CallbackInfo ci) {
+        CommonLogic.INSTANCE.loadAdditionalData(tag, this);
     }
 
     @Unique @Override
@@ -170,6 +148,11 @@ public abstract class
     @Unique @Override
     public void setCurrentRecipe(int slot, Recipe<AbstractFurnaceBlockEntity> recipe) {
         you_dont_have_the_right$selectedRecipe = recipe;
+    }
+
+    @Unique @Override
+    public int getRecipeSize() {
+        return 1;
     }
 
     @Unique @Override

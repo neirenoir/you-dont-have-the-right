@@ -18,6 +18,7 @@ public interface TimedCrafter<T extends Container> extends RecipeHolder, Contain
     void setRunway(int runway);
     Recipe<T> getCurrentRecipe(int slot);
     void setCurrentRecipe(int slot, Recipe<T> recipe);
+    int getRecipeSize();
     int getProgress();
     void setProgress(int progress);
     NonNullList<ItemStack> getItems();

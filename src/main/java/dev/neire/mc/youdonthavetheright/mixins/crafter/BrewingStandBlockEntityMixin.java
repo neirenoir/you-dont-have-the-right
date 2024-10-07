@@ -3,9 +3,11 @@ package dev.neire.mc.youdonthavetheright.mixins.crafter;
 import dev.neire.mc.youdonthavetheright.api.crafter.PotionBits;
 import dev.neire.mc.youdonthavetheright.api.crafter.TimedCrafter;
 import dev.neire.mc.youdonthavetheright.logic.crafter.BrewingLogic;
+import dev.neire.mc.youdonthavetheright.logic.crafter.CommonLogic;
 import dev.neire.mc.youdonthavetheright.recipebook.RecipeBookLogic;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -98,6 +100,16 @@ public abstract class BrewingStandBlockEntityMixin
         setCurrentRecipe(2, null);
     }
 
+    @Inject(at = @At("TAIL"), method = "saveAdditional")
+    private void onSaveAdditional(CompoundTag tag, CallbackInfo ci) {
+        CommonLogic.INSTANCE.saveAdditionalData(tag, this);
+    }
+
+    @Inject(at = @At("TAIL"), method = "load")
+    private void onLoadAdditional(CompoundTag tag, CallbackInfo ci) {
+        CommonLogic.INSTANCE.loadAdditionalData(tag, this);
+    }
+
     @Override
     public boolean jumpstart() {
         return true;
@@ -131,6 +143,11 @@ public abstract class BrewingStandBlockEntityMixin
     @Override
     public void setCurrentRecipe(int slot, Recipe<BrewingLogic.VirtualBrewingStandView> recipe) {
         you_dont_have_the_right$selectedRecipes.set(slot, recipe);
+    }
+
+    @Override
+    public int getRecipeSize() {
+        return 3;
     }
 
     @Override

@@ -1,12 +1,16 @@
 package dev.neire.mc.youdonthavetheright.logic.crafter
 
+import dev.neire.mc.youdonthavetheright.api.capability.RecipeBibleCapability
 import dev.neire.mc.youdonthavetheright.api.crafter.PotionBits
 import dev.neire.mc.youdonthavetheright.api.crafter.TimedCrafter
+import dev.neire.mc.youdonthavetheright.config.YdhtrConfig
 import dev.neire.mc.youdonthavetheright.logic.crafter.BrewingLogic.VirtualBrewingStandView.Companion.from
 import dev.neire.mc.youdonthavetheright.recipebook.RecipeBookLogic
 import dev.neire.mc.youdonthavetheright.recipebook.RecipeBrewingRecipe
+import dev.neire.mc.youdonthavetheright.recipebook.WorldRecipeBook.Companion.capability
 import net.minecraft.core.BlockPos
 import net.minecraft.core.NonNullList
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.Containers
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -84,9 +88,7 @@ object BrewingLogic {
             val currentRecipe = brewingView.getCurrentRecipe(0) ?: continue
 
             if ((currentRecipe as RecipeBrewingRecipe).matches(brewingView, brewingStand.level)) {
-                brewingView.setResult(
-                    brewingView.getCurrentRecipe(0)!!.getResultItem(registry).copy()
-                )
+                brewingView.setResult(currentRecipe.getResultItem(registry).copy())
             }
         }
 
@@ -109,7 +111,7 @@ object BrewingLogic {
             ingredient.shrink(1)
         }
 
-        brewingStand.items[3] = ingredient
+        brewingStand.items[INGREDIENT_SLOT] = ingredient
         brewingStand.level.levelEvent(1035, pos, 0)
     }
 
@@ -190,10 +192,23 @@ object BrewingLogic {
                 return
             }
 
+            if (level !is ServerLevel) {
+                return
+            }
+
+            val selectedRecipe =
+                if (YdhtrConfig.ENABLE_WORLD_LEARNED_RECIPES.get()) {
+                    capability(level)
+                        .filter { cap: RecipeBibleCapability -> cap.hasRecipe(newRecipe.get().id) }
+                        .map { newRecipe.get() }
+                        .orElse(null)
+                } else {
+                    newRecipe.get()
+                }
 
             // This will get overridden by the After part of the SlotChange event
             // if it was initiated by a player
-            setCurrentRecipe(0, newRecipe.get() as Recipe<VirtualBrewingStandView>)
+            setCurrentRecipe(0, selectedRecipe ?: null)
         }
 
         fun setResult(result: ItemStack) {
@@ -257,6 +272,10 @@ object BrewingLogic {
 
         override fun setCurrentRecipe(slot: Int, recipe: Recipe<VirtualBrewingStandView>?) {
             getParentTimedCrafter().setCurrentRecipe(this.slot, recipe)
+        }
+
+        override fun getRecipeSize(): Int {
+            return 1
         }
 
         // region RecipeContainer

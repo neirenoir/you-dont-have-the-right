@@ -174,5 +174,4 @@ object FurnaceLogic {
 
         furnace.jumpstart()
     }
-    // TODO: save recipe to NBT!
 }

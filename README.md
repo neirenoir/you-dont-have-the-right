@@ -18,6 +18,8 @@ or touches water (configurable).
 * **[NERB (Not Enough Recipe Book)](https://modrinth.com/mod/nerb)**, as it disables the
 recipe book entirely, which is the underlying mechanism of this entire mod.
 * Any mod that modifies the tick logic of furnaces or brewing stands.
+* Any mod that adds potions, as these will not work since they have no generated recipes.
+Ping me to get your mod's potion recipes generated and included!
 
 # Best used with...
 * **[Better Recipe Book](https://modrinth.com/mod/brb/versions)**, with "hide locked recipes"

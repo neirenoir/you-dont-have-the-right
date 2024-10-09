@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "youdonthavetheright.refmap.json",
   "mixins": [
+    "compat.brb.BrewableResultMixin",
+    "compat.brb.BrewingRecipeCollectionMixin",
     "crafter.AbstractFurnaceBlockEntityMixin",
     "crafter.BrewingStandBlockEntityMixin",
     "crafter.PotionBrewingAccessor",

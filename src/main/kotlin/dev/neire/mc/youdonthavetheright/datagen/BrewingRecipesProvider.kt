@@ -1,5 +1,6 @@
 package dev.neire.mc.youdonthavetheright.datagen
 
+import dev.neire.mc.youdonthavetheright.logic.crafter.BrewingLogic
 import dev.neire.mc.youdonthavetheright.mixins.crafter.PotionBrewingAccessor
 import dev.neire.mc.youdonthavetheright.recipebook.BrewingBookCategory
 import dev.neire.mc.youdonthavetheright.recipebook.RecipeBrewingRecipe
@@ -80,10 +81,8 @@ class BrewingRecipesProvider(packOutput: PackOutput) : RecipeProvider(packOutput
                 val resultPotionStack =
                     PotionUtils.setPotion(ItemStack(potionItem), outputPotion)
 
-                val recipeId = ResourceLocation(
-                    "${inputRL.namespace}:" +
-                        "${potionItemRL?.path}_" +
-                        "${inputRL.path}_${ingredientRL.path}_${outputRL.path}"
+                val recipeId = BrewingLogic.buildRecipeId(
+                    potionItemRL!!, inputRL, ingredientRL, outputRL
                 )
 
                 // Build and save the brewing recipe using the custom BrewingRecipeBuilder

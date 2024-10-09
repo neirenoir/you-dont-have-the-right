@@ -10,6 +10,7 @@ import dev.neire.mc.youdonthavetheright.recipebook.RecipeBrewingRecipe
 import dev.neire.mc.youdonthavetheright.recipebook.WorldRecipeBook.Companion.capability
 import net.minecraft.core.BlockPos
 import net.minecraft.core.NonNullList
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.Containers
 import net.minecraft.world.entity.player.Player
@@ -148,6 +149,17 @@ object BrewingLogic {
 
             brewingStand.level?.setBlock(pos, currState, 2)
         }
+    }
+
+    fun buildRecipeId(
+        potion: ResourceLocation,
+        input: ResourceLocation,
+        ingredient: ResourceLocation,
+        output: ResourceLocation
+    ): ResourceLocation {
+        val recipeName =
+            "${input.namespace}:${potion.path}_${input.path}_${ingredient.path}_${output.path}"
+        return ResourceLocation(recipeName)
     }
 
     class VirtualBrewingStandView: TimedCrafter<VirtualBrewingStandView> {

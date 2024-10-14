@@ -3,15 +3,18 @@ modLoader="kotlinforforge"
 # Make sure this is set to the appropriate version range
 loaderVersion="[4,)" # Require at least 4.x
 license="${mod_license}"
+logoFile="logo.png"
 
 [[mods]]
-modId="${mod_id}"
-version="${mod_version}"
-displayName="${mod_name}"
-# optional
-#credits="The ExampleMod dev team"
-authors="${mod_authors}"
-description='''${mod_description}'''
+    modId="${mod_id}"
+    version="${mod_version}"
+    displayName="${mod_name}"
+    # optional
+    #credits="The ExampleMod dev team"
+    authors="${mod_authors}"
+    description='''${mod_description}'''
+    displayTest="IGNORE_SERVER_VERSION"
+
 [[dependencies.${mod_id}]]
     modId="forge"
     mandatory=true

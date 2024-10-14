@@ -5,6 +5,7 @@ import dev.neire.mc.youdonthavetheright.datagen.BrewingRecipesEventListener
 import dev.neire.mc.youdonthavetheright.logic.crafter.CommonLogic
 import dev.neire.mc.youdonthavetheright.recipebook.RecipeBookLogic
 import dev.neire.mc.youdonthavetheright.recipebook.WorldRecipeBook
+import net.minecraftforge.fml.IExtensionPoint
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig.Type

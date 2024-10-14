@@ -124,8 +124,8 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Better Recipe Book integration
-    implementation fg.deobf("curse.maven:brb-486485:5460985")
-    implementation fg.deobf("curse.maven:architectury-api-419699:5137938")
+    compileOnly fg.deobf("curse.maven:brb-486485:5460985")
+    compileOnly fg.deobf("curse.maven:architectury-api-419699:5137938")
 
     // Required for a Mixin type
     implementation 'it.unimi.dsi:fastutil:8.5.12'

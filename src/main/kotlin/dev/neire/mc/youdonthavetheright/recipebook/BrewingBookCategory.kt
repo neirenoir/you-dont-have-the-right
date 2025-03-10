@@ -7,6 +7,10 @@ enum class BrewingBookCategory(val category: String): StringRepresentable {
     POTION("potion"),
     SPLASHING("splashing"),
     LINGERING("lingering"),
+
+    // Caverns and Chasms types
+    TETHER("tether"),
+
     MISC("misc");
 
     override fun getSerializedName(): String {

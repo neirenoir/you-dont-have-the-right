@@ -1,5 +1,8 @@
 package dev.neire.mc.youdonthavetheright.datagen
 
+import com.teamabnormals.caverns_and_chasms.core.registry.CCItems
+import com.teamabnormals.caverns_and_chasms.core.registry.CCMobEffects.REWIND_LONG
+import com.teamabnormals.caverns_and_chasms.core.registry.CCMobEffects.REWIND_NORMAL
 import dev.neire.mc.youdonthavetheright.logic.crafter.BrewingLogic
 import dev.neire.mc.youdonthavetheright.mixins.crafter.PotionBrewingAccessor
 import dev.neire.mc.youdonthavetheright.recipebook.BrewingBookCategory
@@ -11,6 +14,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potion
+import net.minecraft.world.item.alchemy.PotionBrewing
 import net.minecraft.world.item.alchemy.PotionUtils
 import net.minecraft.world.item.alchemy.Potions
 import net.minecraftforge.data.event.GatherDataEvent
@@ -28,7 +32,8 @@ class BrewingRecipesProvider(packOutput: PackOutput) : RecipeProvider(packOutput
         val potionTypes = arrayOf(
             Pair(Items.POTION, BrewingBookCategory.POTION),
             Pair(Items.SPLASH_POTION, BrewingBookCategory.SPLASHING),
-            Pair(Items.LINGERING_POTION, BrewingBookCategory.LINGERING)
+            Pair(Items.LINGERING_POTION, BrewingBookCategory.LINGERING),
+            Pair(CCItems.TETHER_POTION.get(), BrewingBookCategory.TETHER),
         )
 
         // Iterate over each potion type and its category
@@ -41,7 +46,7 @@ class BrewingRecipesProvider(packOutput: PackOutput) : RecipeProvider(packOutput
                     "Processing brewing mix: {} -> {} with ingredient: {}",
                     inputPotion,
                     outputPotion,
-                    mix.ingredient
+                    mix.ingredient.items[0].item
                 )
 
                 val ingredientRL: ResourceLocation? =
@@ -85,7 +90,7 @@ class BrewingRecipesProvider(packOutput: PackOutput) : RecipeProvider(packOutput
                     potionItemRL!!, inputRL, ingredientRL, outputRL
                 )
 
-                // Build and save the brewing recipe using the custom BrewingRecipeBuilder
+                // Build and save the brewing recipe
                 BrewingRecipeBuilder
                     .brewing(
                         listOf(
@@ -125,8 +130,17 @@ class BrewingRecipesProvider(packOutput: PackOutput) : RecipeProvider(packOutput
     }
 }
 
+fun mimickCavernsAndChasmsPotionRegistration() {
+    PotionBrewingAccessor.addContainer(CCItems.TETHER_POTION.get());
+    PotionBrewingAccessor.addContainerRecipe(Items.POTION, CCItems.SPINEL.get(), CCItems.TETHER_POTION.get());
+
+    PotionBrewingAccessor.addMix(Potions.AWKWARD, CCItems.BEJEWELED_PEARL.get(), REWIND_NORMAL.get());
+    PotionBrewingAccessor.addMix(REWIND_NORMAL.get(), Items.REDSTONE, REWIND_LONG.get());
+}
+
 object BrewingRecipesEventListener {
     fun onGatherData(ev: GatherDataEvent) {
+        mimickCavernsAndChasmsPotionRegistration()
         ev.generator.addProvider(
             ev.includeServer(),
             BrewingRecipesProvider(ev.generator.packOutput)

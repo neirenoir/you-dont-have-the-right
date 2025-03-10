@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "splashing",
+  "ingredients": [
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:awkward"
+      },
+      "item": "minecraft:splash_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:strength"
+    },
+    "item": "minecraft:splash_potion"
+  }
+}

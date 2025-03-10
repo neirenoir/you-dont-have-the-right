@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "potion",
+  "ingredients": [
+    {
+      "item": "caverns_and_chasms:bejeweled_pearl"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:awkward"
+      },
+      "item": "minecraft:potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "caverns_and_chasms:rewind"
+    },
+    "item": "minecraft:potion"
+  }
+}

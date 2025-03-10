@@ -1,0 +1,21 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "ingredients": [
+    {
+      "item": "caverns_and_chasms:spinel"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:water"
+      },
+      "item": "minecraft:potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:water"
+    },
+    "item": "caverns_and_chasms:tether_potion"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "potion",
+  "ingredients": [
+    {
+      "item": "minecraft:glistering_melon_slice"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:awkward"
+      },
+      "item": "minecraft:potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:healing"
+    },
+    "item": "minecraft:potion"
+  }
+}

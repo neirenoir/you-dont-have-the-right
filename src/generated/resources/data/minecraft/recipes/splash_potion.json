@@ -1,0 +1,21 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "ingredients": [
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:water"
+      },
+      "item": "minecraft:potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:water"
+    },
+    "item": "minecraft:splash_potion"
+  }
+}

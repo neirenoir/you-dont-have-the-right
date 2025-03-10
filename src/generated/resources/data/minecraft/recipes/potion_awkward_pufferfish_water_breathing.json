@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "potion",
+  "ingredients": [
+    {
+      "item": "minecraft:pufferfish"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:awkward"
+      },
+      "item": "minecraft:potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:water_breathing"
+    },
+    "item": "minecraft:potion"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "tether",
+  "ingredients": [
+    {
+      "data": {},
+      "item": "minecraft:turtle_helmet"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:awkward"
+      },
+      "item": "caverns_and_chasms:tether_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:turtle_master"
+    },
+    "item": "caverns_and_chasms:tether_potion"
+  }
+}

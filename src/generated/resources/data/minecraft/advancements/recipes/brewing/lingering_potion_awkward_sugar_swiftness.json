@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_potion": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:lingering_potion"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:lingering_potion_awkward_sugar_swiftness"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_potion",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:lingering_potion_awkward_sugar_swiftness"
+    ]
+  },
+  "sends_telemetry_event": false
+}

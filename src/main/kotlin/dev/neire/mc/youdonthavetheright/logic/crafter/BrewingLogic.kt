@@ -157,9 +157,18 @@ object BrewingLogic {
         ingredient: ResourceLocation,
         output: ResourceLocation
     ): ResourceLocation {
+        val namespace = arrayOf(
+            potion.namespace,
+            input.namespace,
+            ingredient.namespace,
+            output.namespace
+        ).firstOrNull({ namespace -> namespace != "minecraft"})
         val recipeName =
-            "${input.namespace}:${potion.path}_${input.path}_${ingredient.path}_${output.path}"
-        return ResourceLocation(recipeName)
+            "${potion.path}_${input.path}_${ingredient.path}_${output.path}"
+        return ResourceLocation(
+            namespace ?: "minecraft",
+            recipeName
+        )
     }
 
     class VirtualBrewingStandView: TimedCrafter<VirtualBrewingStandView> {

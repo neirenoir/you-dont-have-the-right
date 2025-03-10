@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "tether",
+  "ingredients": [
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:awkward"
+      },
+      "item": "caverns_and_chasms:tether_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:strength"
+    },
+    "item": "caverns_and_chasms:tether_potion"
+  }
+}

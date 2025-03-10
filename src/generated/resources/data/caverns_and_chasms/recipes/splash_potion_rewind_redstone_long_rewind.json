@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "splashing",
+  "ingredients": [
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "data": {
+        "Potion": "caverns_and_chasms:rewind"
+      },
+      "item": "minecraft:splash_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "caverns_and_chasms:long_rewind"
+    },
+    "item": "minecraft:splash_potion"
+  }
+}

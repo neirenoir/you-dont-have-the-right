@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "splashing",
+  "ingredients": [
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:strength"
+      },
+      "item": "minecraft:splash_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:strong_strength"
+    },
+    "item": "minecraft:splash_potion"
+  }
+}

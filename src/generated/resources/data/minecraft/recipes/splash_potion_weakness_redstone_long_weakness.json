@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "splashing",
+  "ingredients": [
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:weakness"
+      },
+      "item": "minecraft:splash_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:long_weakness"
+    },
+    "item": "minecraft:splash_potion"
+  }
+}

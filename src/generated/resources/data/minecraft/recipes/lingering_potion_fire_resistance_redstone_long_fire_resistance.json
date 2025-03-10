@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "lingering",
+  "ingredients": [
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:fire_resistance"
+      },
+      "item": "minecraft:lingering_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:long_fire_resistance"
+    },
+    "item": "minecraft:lingering_potion"
+  }
+}

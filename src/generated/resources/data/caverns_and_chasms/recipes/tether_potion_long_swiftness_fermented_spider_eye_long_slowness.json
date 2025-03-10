@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "tether",
+  "ingredients": [
+    {
+      "item": "minecraft:fermented_spider_eye"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:long_swiftness"
+      },
+      "item": "caverns_and_chasms:tether_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:long_slowness"
+    },
+    "item": "caverns_and_chasms:tether_potion"
+  }
+}

@@ -7,6 +7,7 @@ import dev.neire.mc.youdonthavetheright.datagen.BrewingRecipeBuilder.Companion.D
 import dev.neire.mc.youdonthavetheright.logic.crafter.BrewingLogic
 import net.minecraft.core.NonNullList
 import net.minecraft.core.RegistryAccess
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.TagParser
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -33,7 +34,15 @@ class RecipeBrewingRecipe(
             return false;
         }
         for (i in 0 until usedIngredients.size) {
-            val copySingle = usedIngredients[i].copyWithCount(this.ingredients[i].items[0].count)
+            val copySingle =
+                usedIngredients[i].copyWithCount(
+                    this.ingredients[i].items[0].count
+                )
+
+            if (ingredients[i].items[0].shareTag == null) {
+                copySingle.tag = null
+            }
+
             if (!copySingle.equals(this.ingredients[i].items[0], true)) {
                 return false
             }

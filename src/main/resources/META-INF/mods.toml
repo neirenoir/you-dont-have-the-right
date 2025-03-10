@@ -27,6 +27,12 @@ logoFile="logo.png"
     versionRange="[1.20,1.21)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.${mod_id}]]
+    modId="caverns_and_chasms"
+    mandatory=false
+    versionRange="[2.0.0,)"
+    ordering="AFTER"
+    side="BOTH"
 
 [modproperties.youdonthavetheright]
     catalogueItemIcon="minecraft:knowledge_book"

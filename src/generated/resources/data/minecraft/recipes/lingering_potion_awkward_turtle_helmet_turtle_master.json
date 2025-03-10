@@ -1,0 +1,23 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "lingering",
+  "ingredients": [
+    {
+      "data": {},
+      "item": "minecraft:turtle_helmet"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:awkward"
+      },
+      "item": "minecraft:lingering_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:turtle_master"
+    },
+    "item": "minecraft:lingering_potion"
+  }
+}

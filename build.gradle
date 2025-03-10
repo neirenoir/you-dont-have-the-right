@@ -127,6 +127,10 @@ dependencies {
     compileOnly fg.deobf("curse.maven:brb-486485:5460985")
     compileOnly fg.deobf("curse.maven:architectury-api-419699:5137938")
 
+    // Caverns and Chasms integration
+    implementation fg.deobf("curse.maven:blueprint-382216:6143229")
+    implementation fg.deobf("curse.maven:caverns-and-chasms-438005:6040957")
+
     // Required for a Mixin type
     implementation 'it.unimi.dsi:fastutil:8.5.12'
 }

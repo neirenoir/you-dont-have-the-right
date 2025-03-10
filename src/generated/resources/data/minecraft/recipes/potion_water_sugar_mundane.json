@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "potion",
+  "ingredients": [
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:water"
+      },
+      "item": "minecraft:potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:mundane"
+    },
+    "item": "minecraft:potion"
+  }
+}

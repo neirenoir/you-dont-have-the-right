@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "lingering",
+  "ingredients": [
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:awkward"
+      },
+      "item": "minecraft:lingering_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:swiftness"
+    },
+    "item": "minecraft:lingering_potion"
+  }
+}

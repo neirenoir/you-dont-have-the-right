@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "tether",
+  "ingredients": [
+    {
+      "item": "minecraft:magma_cream"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:water"
+      },
+      "item": "caverns_and_chasms:tether_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:mundane"
+    },
+    "item": "caverns_and_chasms:tether_potion"
+  }
+}

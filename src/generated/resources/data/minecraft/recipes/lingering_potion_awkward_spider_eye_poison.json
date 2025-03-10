@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "lingering",
+  "ingredients": [
+    {
+      "item": "minecraft:spider_eye"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:awkward"
+      },
+      "item": "minecraft:lingering_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:poison"
+    },
+    "item": "minecraft:lingering_potion"
+  }
+}

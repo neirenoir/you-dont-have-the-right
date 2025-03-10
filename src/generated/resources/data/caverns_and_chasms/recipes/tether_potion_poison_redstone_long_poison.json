@@ -1,0 +1,22 @@
+{
+  "type": "youdonthavetheright:brewing",
+  "category": "potion",
+  "group": "tether",
+  "ingredients": [
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "data": {
+        "Potion": "minecraft:poison"
+      },
+      "item": "caverns_and_chasms:tether_potion"
+    }
+  ],
+  "result": {
+    "data": {
+      "Potion": "minecraft:long_poison"
+    },
+    "item": "caverns_and_chasms:tether_potion"
+  }
+}

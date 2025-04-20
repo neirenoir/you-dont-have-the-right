@@ -25,15 +25,26 @@ class RecipeBrewingRecipe(
     private val result: ItemStack
 ) : Recipe<BrewingLogic.VirtualBrewingStandView> {
     init {
-        ingredients.sortBy { i -> i.items[0].displayName.string }
+        val filteredIngredients = ingredients.filter{ ing ->
+            ing.items.isNotEmpty()
+        }
+
+        if (filteredIngredients.size != ingredients.size) {
+            ingredients.clear()
+        } else {
+            ingredients.sortBy { i ->
+                i.items[0].displayName.string
+            }
+        }
     }
 
     override fun matches(container: BrewingLogic.VirtualBrewingStandView, level: Level): Boolean {
         val usedIngredients = container.getIngredients()
-        if (usedIngredients.size != this.ingredients.size) {
-            return false;
+        if (usedIngredients.size != this.ingredients.size
+            || this.ingredients.size == 0) {
+            return false
         }
-        for (i in 0 until usedIngredients.size) {
+        for (i in usedIngredients.indices) {
             val copySingle =
                 usedIngredients[i].copyWithCount(
                     this.ingredients[i].items[0].count
@@ -90,8 +101,6 @@ class RecipeBrewingRecipe(
     }
 
     object Serializer : RecipeSerializer<RecipeBrewingRecipe> {
-        val NAME = ResourceLocation("minecraft", "crafting_brewing")
-
         override fun toString(): String {
             return RecipeBookLogic.BREWING_RECIPE_TYPE_KEY
         }

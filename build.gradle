@@ -124,8 +124,8 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Better Recipe Book integration
-    compileOnly fg.deobf("curse.maven:brb-486485:5460985")
-    compileOnly fg.deobf("curse.maven:architectury-api-419699:5137938")
+    implementation fg.deobf("curse.maven:brb-486485:5460985")
+    implementation fg.deobf("curse.maven:architectury-api-419699:5137938")
 
     // Caverns and Chasms integration
     implementation fg.deobf("curse.maven:blueprint-382216:6143229")

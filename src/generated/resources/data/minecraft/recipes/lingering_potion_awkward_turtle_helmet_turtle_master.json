@@ -1,23 +1,36 @@
 {
-  "type": "youdonthavetheright:brewing",
-  "category": "potion",
-  "group": "lingering",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "data": {},
-      "item": "minecraft:turtle_helmet"
-    },
-    {
-      "data": {
-        "Potion": "minecraft:awkward"
-      },
-      "item": "minecraft:lingering_potion"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "minecraft"
+        }
+      ],
+      "recipe": {
+        "type": "youdonthavetheright:brewing",
+        "category": "potion",
+        "group": "lingering",
+        "ingredients": [
+          {
+            "data": {},
+            "item": "minecraft:turtle_helmet"
+          },
+          {
+            "data": {
+              "Potion": "minecraft:awkward"
+            },
+            "item": "minecraft:lingering_potion"
+          }
+        ],
+        "result": {
+          "data": {
+            "Potion": "minecraft:turtle_master"
+          },
+          "item": "minecraft:lingering_potion"
+        }
+      }
     }
-  ],
-  "result": {
-    "data": {
-      "Potion": "minecraft:turtle_master"
-    },
-    "item": "minecraft:lingering_potion"
-  }
+  ]
 }

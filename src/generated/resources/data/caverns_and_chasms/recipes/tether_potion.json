@@ -1,21 +1,34 @@
 {
-  "type": "youdonthavetheright:brewing",
-  "category": "potion",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "caverns_and_chasms:spinel"
-    },
-    {
-      "data": {
-        "Potion": "minecraft:water"
-      },
-      "item": "minecraft:potion"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "caverns_and_chasms"
+        }
+      ],
+      "recipe": {
+        "type": "youdonthavetheright:brewing",
+        "category": "potion",
+        "ingredients": [
+          {
+            "item": "caverns_and_chasms:spinel"
+          },
+          {
+            "data": {
+              "Potion": "minecraft:water"
+            },
+            "item": "minecraft:potion"
+          }
+        ],
+        "result": {
+          "data": {
+            "Potion": "minecraft:water"
+          },
+          "item": "caverns_and_chasms:tether_potion"
+        }
+      }
     }
-  ],
-  "result": {
-    "data": {
-      "Potion": "minecraft:water"
-    },
-    "item": "caverns_and_chasms:tether_potion"
-  }
+  ]
 }

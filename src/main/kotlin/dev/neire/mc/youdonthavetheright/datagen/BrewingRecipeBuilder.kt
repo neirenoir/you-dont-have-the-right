@@ -16,6 +16,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.RecipeSerializer
+import net.minecraftforge.common.crafting.ConditionalRecipe
+import net.minecraftforge.common.crafting.conditions.ModLoadedCondition
 import net.minecraftforge.registries.ForgeRegistries
 import java.util.function.Consumer
 
@@ -47,23 +49,30 @@ class BrewingRecipeBuilder private constructor(
     }
 
     override fun save(recipeConsumer: Consumer<FinishedRecipe>, name: ResourceLocation) {
+        ConditionalRecipe.builder()
+            .addCondition(ModLoadedCondition(name.namespace))
+            .addRecipe(
+                Result(
+                    name,
+                    (if (this.group == null) "" else this.group)!!,
+                    this.bookCategory,
+                    this.ingredients,
+                    this.result,
+                    this.advancement, name.withPrefix("recipes/" + this.category.folderName + "/"),
+                    this.serializer
+                )
+            )
+            .generateAdvancement()
+            .build(recipeConsumer, name)
+    }
+/*
+    fun save(name: ResourceLocation): Result {
         advancement.parent(RecipeBuilder.ROOT_RECIPE_ADVANCEMENT)
             .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(name)).rewards(
                 AdvancementRewards.Builder.recipe(name)
             ).requirements(RequirementsStrategy.OR)
-        recipeConsumer.accept(
-            Result(
-                name,
-                (if (this.group == null) "" else this.group)!!,
-                this.bookCategory,
-                this.ingredients,
-                this.result,
-                this.advancement, name.withPrefix("recipes/" + this.category.folderName + "/"),
-                this.serializer
-            )
-        )
     }
-
+*/
     internal class Result(
         private val id: ResourceLocation,
         private val group: String,

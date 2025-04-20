@@ -1,22 +1,35 @@
 {
-  "type": "youdonthavetheright:brewing",
-  "category": "potion",
-  "group": "lingering",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "minecraft:glowstone_dust"
-    },
-    {
-      "data": {
-        "Potion": "minecraft:regeneration"
-      },
-      "item": "minecraft:lingering_potion"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "minecraft"
+        }
+      ],
+      "recipe": {
+        "type": "youdonthavetheright:brewing",
+        "category": "potion",
+        "group": "lingering",
+        "ingredients": [
+          {
+            "item": "minecraft:glowstone_dust"
+          },
+          {
+            "data": {
+              "Potion": "minecraft:regeneration"
+            },
+            "item": "minecraft:lingering_potion"
+          }
+        ],
+        "result": {
+          "data": {
+            "Potion": "minecraft:strong_regeneration"
+          },
+          "item": "minecraft:lingering_potion"
+        }
+      }
     }
-  ],
-  "result": {
-    "data": {
-      "Potion": "minecraft:strong_regeneration"
-    },
-    "item": "minecraft:lingering_potion"
-  }
+  ]
 }

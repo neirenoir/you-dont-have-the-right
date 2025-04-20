@@ -1,22 +1,35 @@
 {
-  "type": "youdonthavetheright:brewing",
-  "category": "potion",
-  "group": "potion",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "minecraft:fermented_spider_eye"
-    },
-    {
-      "data": {
-        "Potion": "minecraft:long_leaping"
-      },
-      "item": "minecraft:potion"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "minecraft"
+        }
+      ],
+      "recipe": {
+        "type": "youdonthavetheright:brewing",
+        "category": "potion",
+        "group": "potion",
+        "ingredients": [
+          {
+            "item": "minecraft:fermented_spider_eye"
+          },
+          {
+            "data": {
+              "Potion": "minecraft:long_leaping"
+            },
+            "item": "minecraft:potion"
+          }
+        ],
+        "result": {
+          "data": {
+            "Potion": "minecraft:long_slowness"
+          },
+          "item": "minecraft:potion"
+        }
+      }
     }
-  ],
-  "result": {
-    "data": {
-      "Potion": "minecraft:long_slowness"
-    },
-    "item": "minecraft:potion"
-  }
+  ]
 }

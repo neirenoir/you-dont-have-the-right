@@ -1,22 +1,35 @@
 {
-  "type": "youdonthavetheright:brewing",
-  "category": "potion",
-  "group": "potion",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "minecraft:pufferfish"
-    },
-    {
-      "data": {
-        "Potion": "minecraft:awkward"
-      },
-      "item": "minecraft:potion"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "minecraft"
+        }
+      ],
+      "recipe": {
+        "type": "youdonthavetheright:brewing",
+        "category": "potion",
+        "group": "potion",
+        "ingredients": [
+          {
+            "item": "minecraft:pufferfish"
+          },
+          {
+            "data": {
+              "Potion": "minecraft:awkward"
+            },
+            "item": "minecraft:potion"
+          }
+        ],
+        "result": {
+          "data": {
+            "Potion": "minecraft:water_breathing"
+          },
+          "item": "minecraft:potion"
+        }
+      }
     }
-  ],
-  "result": {
-    "data": {
-      "Potion": "minecraft:water_breathing"
-    },
-    "item": "minecraft:potion"
-  }
+  ]
 }

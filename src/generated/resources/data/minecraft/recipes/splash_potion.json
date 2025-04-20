@@ -1,21 +1,34 @@
 {
-  "type": "youdonthavetheright:brewing",
-  "category": "potion",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "minecraft:gunpowder"
-    },
-    {
-      "data": {
-        "Potion": "minecraft:water"
-      },
-      "item": "minecraft:potion"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "minecraft"
+        }
+      ],
+      "recipe": {
+        "type": "youdonthavetheright:brewing",
+        "category": "potion",
+        "ingredients": [
+          {
+            "item": "minecraft:gunpowder"
+          },
+          {
+            "data": {
+              "Potion": "minecraft:water"
+            },
+            "item": "minecraft:potion"
+          }
+        ],
+        "result": {
+          "data": {
+            "Potion": "minecraft:water"
+          },
+          "item": "minecraft:splash_potion"
+        }
+      }
     }
-  ],
-  "result": {
-    "data": {
-      "Potion": "minecraft:water"
-    },
-    "item": "minecraft:splash_potion"
-  }
+  ]
 }

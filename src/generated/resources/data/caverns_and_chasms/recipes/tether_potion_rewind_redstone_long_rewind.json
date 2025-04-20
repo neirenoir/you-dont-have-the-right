@@ -1,22 +1,35 @@
 {
-  "type": "youdonthavetheright:brewing",
-  "category": "potion",
-  "group": "tether",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "minecraft:redstone"
-    },
-    {
-      "data": {
-        "Potion": "caverns_and_chasms:rewind"
-      },
-      "item": "caverns_and_chasms:tether_potion"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "caverns_and_chasms"
+        }
+      ],
+      "recipe": {
+        "type": "youdonthavetheright:brewing",
+        "category": "potion",
+        "group": "tether",
+        "ingredients": [
+          {
+            "item": "minecraft:redstone"
+          },
+          {
+            "data": {
+              "Potion": "caverns_and_chasms:rewind"
+            },
+            "item": "caverns_and_chasms:tether_potion"
+          }
+        ],
+        "result": {
+          "data": {
+            "Potion": "caverns_and_chasms:long_rewind"
+          },
+          "item": "caverns_and_chasms:tether_potion"
+        }
+      }
     }
-  ],
-  "result": {
-    "data": {
-      "Potion": "caverns_and_chasms:long_rewind"
-    },
-    "item": "caverns_and_chasms:tether_potion"
-  }
+  ]
 }

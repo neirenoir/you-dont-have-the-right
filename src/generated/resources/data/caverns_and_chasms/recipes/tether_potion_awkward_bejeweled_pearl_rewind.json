@@ -1,22 +1,35 @@
 {
-  "type": "youdonthavetheright:brewing",
-  "category": "potion",
-  "group": "tether",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "caverns_and_chasms:bejeweled_pearl"
-    },
-    {
-      "data": {
-        "Potion": "minecraft:awkward"
-      },
-      "item": "caverns_and_chasms:tether_potion"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "caverns_and_chasms"
+        }
+      ],
+      "recipe": {
+        "type": "youdonthavetheright:brewing",
+        "category": "potion",
+        "group": "tether",
+        "ingredients": [
+          {
+            "item": "caverns_and_chasms:bejeweled_pearl"
+          },
+          {
+            "data": {
+              "Potion": "minecraft:awkward"
+            },
+            "item": "caverns_and_chasms:tether_potion"
+          }
+        ],
+        "result": {
+          "data": {
+            "Potion": "caverns_and_chasms:rewind"
+          },
+          "item": "caverns_and_chasms:tether_potion"
+        }
+      }
     }
-  ],
-  "result": {
-    "data": {
-      "Potion": "caverns_and_chasms:rewind"
-    },
-    "item": "caverns_and_chasms:tether_potion"
-  }
+  ]
 }

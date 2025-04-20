@@ -1,22 +1,35 @@
 {
-  "type": "youdonthavetheright:brewing",
-  "category": "potion",
-  "group": "splashing",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "minecraft:glowstone_dust"
-    },
-    {
-      "data": {
-        "Potion": "minecraft:strength"
-      },
-      "item": "minecraft:splash_potion"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "minecraft"
+        }
+      ],
+      "recipe": {
+        "type": "youdonthavetheright:brewing",
+        "category": "potion",
+        "group": "splashing",
+        "ingredients": [
+          {
+            "item": "minecraft:glowstone_dust"
+          },
+          {
+            "data": {
+              "Potion": "minecraft:strength"
+            },
+            "item": "minecraft:splash_potion"
+          }
+        ],
+        "result": {
+          "data": {
+            "Potion": "minecraft:strong_strength"
+          },
+          "item": "minecraft:splash_potion"
+        }
+      }
     }
-  ],
-  "result": {
-    "data": {
-      "Potion": "minecraft:strong_strength"
-    },
-    "item": "minecraft:splash_potion"
-  }
+  ]
 }

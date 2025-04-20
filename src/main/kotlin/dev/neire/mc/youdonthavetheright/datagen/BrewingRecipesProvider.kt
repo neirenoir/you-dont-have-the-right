@@ -1,5 +1,6 @@
 package dev.neire.mc.youdonthavetheright.datagen
 
+import com.google.gson.JsonObject
 import com.teamabnormals.caverns_and_chasms.core.registry.CCItems
 import com.teamabnormals.caverns_and_chasms.core.registry.CCMobEffects.REWIND_LONG
 import com.teamabnormals.caverns_and_chasms.core.registry.CCMobEffects.REWIND_NORMAL
@@ -14,16 +15,16 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potion
-import net.minecraft.world.item.alchemy.PotionBrewing
 import net.minecraft.world.item.alchemy.PotionUtils
 import net.minecraft.world.item.alchemy.Potions
+import net.minecraftforge.common.crafting.ConditionalRecipe
 import net.minecraftforge.data.event.GatherDataEvent
 import net.minecraftforge.registries.ForgeRegistries
 import java.util.function.Consumer
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
-class BrewingRecipesProvider(packOutput: PackOutput) : RecipeProvider(packOutput) {
+class BrewingRecipesProvider(private val packOutput: PackOutput) : RecipeProvider(packOutput) {
 
     // Initialize a logger for debugging purposes
     private val logger: Logger = LogManager.getLogger()
@@ -59,8 +60,12 @@ class BrewingRecipesProvider(packOutput: PackOutput) : RecipeProvider(packOutput
                     ForgeRegistries.ITEMS.getKey(potionItem)
 
                 if (ingredientRL == null) {
-                    logger.warn("Ingredient item not registered: ${mix.ingredient.items[0]
-                        .item}")
+                    logger.warn(
+                        "Ingredient item not registered: ${
+                            mix.ingredient.items[0]
+                                .item
+                        }"
+                    )
                     return@forEach
                 }
 
@@ -90,7 +95,7 @@ class BrewingRecipesProvider(packOutput: PackOutput) : RecipeProvider(packOutput
                     potionItemRL!!, inputRL, ingredientRL, outputRL
                 )
 
-                // Build and save the brewing recipe
+                // Start building conditional recipe
                 BrewingRecipeBuilder
                     .brewing(
                         listOf(
@@ -129,6 +134,7 @@ class BrewingRecipesProvider(packOutput: PackOutput) : RecipeProvider(packOutput
         }
     }
 }
+
 
 fun mimickCavernsAndChasmsPotionRegistration() {
     PotionBrewingAccessor.addContainer(CCItems.TETHER_POTION.get());

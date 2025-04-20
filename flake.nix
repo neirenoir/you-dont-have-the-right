@@ -35,6 +35,7 @@
             jetbrains.jdk-no-jcef-17
           ];
           shellHook = ''
+            export TMPDIR="/tmp/"
             export JAVA_HOME=${pkgs.jetbrains.jdk-no-jcef-17}
             export LD_LIBRARY_PATH=${nixpkgs.lib.makeLibraryPath runtimeLibs}
           '';

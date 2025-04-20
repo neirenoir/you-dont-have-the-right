@@ -1,22 +1,35 @@
 {
-  "type": "youdonthavetheright:brewing",
-  "category": "potion",
-  "group": "lingering",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "minecraft:golden_carrot"
-    },
-    {
-      "data": {
-        "Potion": "minecraft:awkward"
-      },
-      "item": "minecraft:lingering_potion"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "minecraft"
+        }
+      ],
+      "recipe": {
+        "type": "youdonthavetheright:brewing",
+        "category": "potion",
+        "group": "lingering",
+        "ingredients": [
+          {
+            "item": "minecraft:golden_carrot"
+          },
+          {
+            "data": {
+              "Potion": "minecraft:awkward"
+            },
+            "item": "minecraft:lingering_potion"
+          }
+        ],
+        "result": {
+          "data": {
+            "Potion": "minecraft:night_vision"
+          },
+          "item": "minecraft:lingering_potion"
+        }
+      }
     }
-  ],
-  "result": {
-    "data": {
-      "Potion": "minecraft:night_vision"
-    },
-    "item": "minecraft:lingering_potion"
-  }
+  ]
 }

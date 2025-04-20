@@ -1,0 +1,34 @@
+{
+  "advancements": [
+    {
+      "advancement": {
+        "criteria": {
+          "has_potion": {
+            "conditions": {
+              "items": [
+                {
+                  "items": [
+                    "minecraft:splash_potion"
+                  ]
+                }
+              ]
+            },
+            "trigger": "minecraft:inventory_changed"
+          }
+        },
+        "requirements": [
+          [
+            "has_potion"
+          ]
+        ],
+        "sends_telemetry_event": false
+      },
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "caverns_and_chasms"
+        }
+      ]
+    }
+  ]
+}

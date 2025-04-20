@@ -1,22 +1,35 @@
 {
-  "type": "youdonthavetheright:brewing",
-  "category": "potion",
-  "group": "tether",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "minecraft:glistering_melon_slice"
-    },
-    {
-      "data": {
-        "Potion": "minecraft:awkward"
-      },
-      "item": "caverns_and_chasms:tether_potion"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "caverns_and_chasms"
+        }
+      ],
+      "recipe": {
+        "type": "youdonthavetheright:brewing",
+        "category": "potion",
+        "group": "tether",
+        "ingredients": [
+          {
+            "item": "minecraft:glistering_melon_slice"
+          },
+          {
+            "data": {
+              "Potion": "minecraft:awkward"
+            },
+            "item": "caverns_and_chasms:tether_potion"
+          }
+        ],
+        "result": {
+          "data": {
+            "Potion": "minecraft:healing"
+          },
+          "item": "caverns_and_chasms:tether_potion"
+        }
+      }
     }
-  ],
-  "result": {
-    "data": {
-      "Potion": "minecraft:healing"
-    },
-    "item": "caverns_and_chasms:tether_potion"
-  }
+  ]
 }

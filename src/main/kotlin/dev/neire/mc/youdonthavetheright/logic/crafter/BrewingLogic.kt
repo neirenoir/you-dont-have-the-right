@@ -1,5 +1,6 @@
 package dev.neire.mc.youdonthavetheright.logic.crafter
 
+import com.mojang.authlib.minecraft.client.MinecraftClient
 import dev.neire.mc.youdonthavetheright.api.capability.RecipeBibleCapability
 import dev.neire.mc.youdonthavetheright.api.crafter.PotionBits
 import dev.neire.mc.youdonthavetheright.api.crafter.TimedCrafter
@@ -11,17 +12,20 @@ import dev.neire.mc.youdonthavetheright.recipebook.WorldRecipeBook.Companion.cap
 import net.minecraft.core.BlockPos
 import net.minecraft.core.NonNullList
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.Containers
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BrewingStandBlock
 import net.minecraft.world.level.block.entity.BrewingStandBlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraftforge.common.brewing.BrewingRecipe
 import net.minecraftforge.event.ForgeEventFactory
 import kotlin.experimental.and
 import kotlin.properties.Delegates
@@ -114,6 +118,20 @@ object BrewingLogic {
 
         brewingStand.items[INGREDIENT_SLOT] = ingredient
         brewingStand.level.levelEvent(1035, pos, 0)
+    }
+
+    fun isValidIngredient(level: Level?, stack: ItemStack): Boolean {
+        val recipeManager = level?.recipeManager ?: return false
+        val recipes =
+            recipeManager.getAllRecipesFor<VirtualBrewingStandView, Recipe<VirtualBrewingStandView>>(
+                RecipeBookLogic.BREWING_RECIPE_TYPE!!
+            )
+
+        return recipes
+            .map { recipe -> recipe.ingredients }
+            .any { ingredients -> ingredients.any {
+                ingredient -> ingredient.test(stack)
+            }}
     }
 
     fun itemInserted(

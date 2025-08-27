@@ -33,10 +33,11 @@
             openjdk17
             openjdk21
             jetbrains.jdk-no-jcef-17
+            gradle
           ];
           shellHook = ''
             export TMPDIR="/tmp/"
-            export JAVA_HOME=${pkgs.jetbrains.jdk-no-jcef-17}
+            export JAVA_HOME=${pkgs.jetbrains.jdk-no-jcef-17}/lib/openjdk
             export LD_LIBRARY_PATH=${nixpkgs.lib.makeLibraryPath runtimeLibs}
           '';
         };

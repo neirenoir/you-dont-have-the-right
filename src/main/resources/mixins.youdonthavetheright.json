@@ -10,6 +10,7 @@
     "crafter.AbstractFurnaceBlockEntityMixin",
     "crafter.BrewingStandBlockEntityMixin",
     "crafter.PotionBrewingAccessor",
+    "crafter.PotionIngredientsSlotMixin",
     "divineinspiration.AbstractFurnaceBlockEntityRecipeHolderMixin",
     "divineinspiration.AdvancementRewardsMixin",
     "divineinspiration.GameRulesMixin",

@@ -22,6 +22,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
@@ -108,6 +109,17 @@ public abstract class BrewingStandBlockEntityMixin
     @Inject(at = @At("TAIL"), method = "load")
     private void onLoadAdditional(CompoundTag tag, CallbackInfo ci) {
         CommonLogic.INSTANCE.loadAdditionalData(tag, this);
+    }
+
+    @Redirect(
+            method = "canPlaceItem(ILnet/minecraft/world/item/ItemStack;)Z",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraftforge/common/brewing/BrewingRecipeRegistry;isValidIngredient(Lnet/minecraft/world/item/ItemStack;)Z"
+            )
+    )
+    private boolean redirectIsValidIngredient(ItemStack stack) {
+        return BrewingLogic.INSTANCE.isValidIngredient(this.level, stack);
     }
 
     @Override
